@@ -33,9 +33,7 @@ All workloads are deployed in private subnets across multiple Availability Zones
 Monitoring and secrets management are handled by CloudWatch and Secrets Manager, with the entire infrastructure provisioned through Terraform IaC. This architecture ensures high security, elasticity, and cost efficiency suitable for the current development stage and future production scaling.
 
 
-![IoT Weather Station Architecture](/images/2-Proposal/edge_architecture.jpeg)
-
-![IoT Weather Platform Architecture](/images/2-Proposal/platform_architecture.jpeg)
+![IoT Weather Station Architecture](/images/2-Proposal/edge_architecture.png)
 
 ### AWS Services Used
 - **Amazon ECS Fargate**: Serverless container orchestration for backend microservices.
