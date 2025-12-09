@@ -8,7 +8,7 @@ pre: " <b> 6. </b> "
 ### Self-Assessment
 
 
-During my internship at **AMAZON WEB SERVICES VIETNAM COMPANY LIMITED** from **08/09** to **[end date]**, I had the opportunity to learn, practice, and apply the knowledge acquired in school to a real-world working environment.
+During my internship at **AMAZON WEB SERVICES VIETNAM COMPANY LIMITED** from **08/09** to **12/12**, I had the opportunity to learn, practice, and apply the knowledge acquired in school to a real-world working environment.
 
 I participated in the **VoltGo (EV Station-based Rental System)** project as a **Frontend Developer** (developing Web Dashboard interface). Through this, I significantly improved the following skills:
 * **Programming:** Building management interface with **Next.js**, deploying through **AWS Amplify**, and handling API integration.

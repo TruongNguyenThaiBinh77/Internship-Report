@@ -8,7 +8,7 @@ pre: " <b> 6. </b> "
 ### Tự đánh giá
 
 
-Trong suốt thời gian thực tập tại **CÔNG TY TNHH AMAZON WEB SERVICES VIỆT NAM** từ **08/09** đến **[ngày kết thúc]**, tôi đã có cơ hội học hỏi, rèn luyện và áp dụng kiến thức đã được trang bị tại trường vào môi trường làm việc thực tế.
+Trong suốt thời gian thực tập tại **CÔNG TY TNHH AMAZON WEB SERVICES VIỆT NAM** từ **08/09** đến **12/12**, tôi đã có cơ hội học hỏi, rèn luyện và áp dụng kiến thức đã được trang bị tại trường vào môi trường làm việc thực tế.
 
 Tôi đã tham gia vào dự án **VoltGo (Hệ thống cho thuê xe điện tại điểm cố định)** với vai trò **Frontend Developer** (phát triển giao diện Web Dashboard). Qua đó, tôi đã cải thiện đáng kể các kỹ năng:
 * **Lập trình:** Xây dựng giao diện quản trị, triển khai qua **AWS Amplify**, và xử lý tích hợp API.
