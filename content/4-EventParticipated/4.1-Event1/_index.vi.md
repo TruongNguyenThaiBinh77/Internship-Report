@@ -5,120 +5,105 @@ chapter: false
 pre: " <b> 4.1. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
+# Bài thu hoạch "Vietnam Cloud Day 2025: Ho Chi Minh City Connect Edition for Builders"
 
-# Bài thu hoạch “GenAI-powered App-DB Modernization workshop”
+**Chủ đề (Track 1):** GenAI & Data (Trí tuệ nhân tạo tạo sinh & Dữ liệu)
 
-### Mục Đích Của Sự Kiện
+### I. MỤC TIÊU THAM DỰ
 
-- Chia sẻ best practices trong thiết kế ứng dụng hiện đại
-- Giới thiệu phương pháp DDD và event-driven architecture
-- Hướng dẫn lựa chọn compute services phù hợp
-- Giới thiệu công cụ AI hỗ trợ development lifecycle
+Việc tham dự sự kiện nhằm cập nhật các xu hướng và giải pháp mới nhất trên AWS, cụ thể tập trung vào 4 mục tiêu chính:
 
-### Danh Sách Diễn Giả
+1. **Chiến lược GenAI toàn diện:** Nắm bắt cách xây dựng quy trình phát triển phần mềm định hướng AI (AI-DLC) và các chiến lược GenAI mới nhất
+2. **Bảo mật doanh nghiệp:** Hiểu sâu về bảo mật trong GenAI và AI Agents để đảm bảo an toàn dữ liệu
+3. **Nền tảng dữ liệu:** Học cách xây dựng nền tảng dữ liệu thống nhất (Unified Data Foundation) tối ưu cho Analytics và AI
+4. **Kết nối chuyên gia:** Trao đổi trực tiếp với đội ngũ kỹ sư và chuyên gia từ AWS
 
-- **Jignesh Shah** - Director, Open Source Databases
-- **Erica Liu** - Sr. GTM Specialist, AppMod
-- **Fabrianne Effendi** - Assc. Specialist SA, Serverless Amazon Web Services
+**Diễn giả tham gia:**
 
-### Nội Dung Nổi Bật
+Đội ngũ AWS: Jun Kai Loke (AI/ML Specialist), Kien Nguyen, Tamelly Lim, Binh Tran, Taiki Dang (Solutions Architects), Michael Armentano (Principal WW GTM Specialist).
 
-#### Đưa ra các ảnh hưởng tiêu cực của kiến trúc ứng dụng cũ
+### II. NỘI DUNG CHUYÊN MÔN TRỌNG TÂM
 
-- Thời gian release sản phẩm lâu → Mất doanh thu/bỏ lỡ cơ hội
-- Hoạt động kém hiệu quả → Mất năng suất, tốn kém chi phí
-- Không tuân thủ các quy định về bảo mật → Mất an ninh, uy tín
+#### 1. Nền tảng dữ liệu thống nhất (Unified Data Platform)
 
-#### Chuyển đổi sang kiến trúc ứng dụng mới - Microservice Architecture
+Để AI hoạt động hiệu quả, dữ liệu cần được xử lý liền mạch. AWS nhấn mạnh mô hình Zero-ETL và phá vỡ các "ốc đảo dữ liệu" (silos):
 
-Chuyển đổi thành hệ thống modular – từng chức năng là một **dịch vụ độc lập** giao tiếp với nhau qua **sự kiện** với 3 trụ cột cốt lõi:
+- **Quy trình End-to-End:** Từ thu thập (Ingestion) $\rightarrow$ Lưu trữ (Storage) $\rightarrow$ Xử lý (Processing) $\rightarrow$ Truy cập (Access) $\rightarrow$ Quản trị (Governance)
+- **Hệ sinh thái dịch vụ:** Kết hợp chặt chẽ giữa Amazon S3, Glue, Redshift, Lake Formation và OpenSearch
+- **Tư duy Self-service:** Trao quyền cho các nhóm dự án tự khai thác dữ liệu nhưng vẫn đảm bảo tuân thủ quy chuẩn chung
 
-- **Queue Management**: Xử lý tác vụ bất đồng bộ
-- **Caching Strategy:** Tối ưu performance
-- **Message Handling:** Giao tiếp linh hoạt giữa services
+#### 2. Chiến lược GenAI & Amazon Bedrock
 
-#### Domain-Driven Design (DDD)
+- **Amazon Bedrock:** Đóng vai trò trung tâm trong việc lựa chọn mô hình (Foundation Models), triển khai RAG (Retrieval-Augmented Generation), và tối ưu hóa chi phí/độ trễ
+- **AgentCore & Amazon Nova:** Hỗ trợ mạnh mẽ các framework Agent hiện đại như CrewAI, LangGraph, LlamaIndex, giúp xây dựng các tác vụ tự động hóa phức tạp
 
-- **Phương pháp 4 bước**: Xác định domain events → sắp xếp timeline → identify actors → xác định bounded contexts
-- **Case study bookstore**: Minh họa cách áp dụng DDD thực tế
-- **Context mapping**: 7 patterns tích hợp bounded contexts
+#### 3. Bảo mật đa lớp cho GenAI (Securing GenAI)
 
-#### Event-Driven Architecture
+Bảo mật không chỉ nằm ở hạ tầng mà phải áp dụng theo mô hình "Defense in Depth" (Phòng thủ chiều sâu):
 
-- **3 patterns tích hợp**: Publish/Subscribe, Point-to-point, Streaming
-- **Lợi ích**: Loose coupling, scalability, resilience
-- **So sánh sync vs async**: Hiểu rõ trade-offs (sự đánh đổi)
+- **3 lớp bảo mật:** Hạ tầng (Infrastructure) $\rightarrow$ Mô hình (Model) $\rightarrow$ Ứng dụng (Application)
+- **5 trụ cột chính:** Tuân thủ (Compliance), Quyền riêng tư (Privacy), Kiểm soát (Controls), Quản lý rủi ro (Risk Management), và Khả năng phục hồi (Resilience)
+- **Công cụ thực tế:** Sử dụng Bedrock Guardrails để kiểm duyệt nội dung đầu ra/đầu vào và OpenTelemetry để giám sát (Observability)
 
-#### Compute Evolution
+#### 4. AI-Driven Development Lifecycle (AI-DLC)
 
-- **Shared Responsibility Model**: Từ EC2 → ECS → Fargate → Lambda
-- **Serverless benefits**: No server management, auto-scaling, pay-for-value
-- **Functions vs Containers**: Criteria lựa chọn phù hợp
+Đây là sự chuyển dịch quan trọng trong tư duy phát triển phần mềm:
 
-#### Amazon Q Developer
+- **Tiến hóa:** Chuyển từ AI-Assisted (AI hỗ trợ code) $\rightarrow$ AI-Driven (AI dẫn dắt) $\rightarrow$ AI-Managed (AI quản lý vận hành)
+- **Thực thi:** Tích hợp AI vào mọi khâu: từ IaC (Infrastructure as Code), kiểm thử tự động (Automated Testing) đến quản lý rủi ro
 
-- **SDLC automation**: Từ planning đến maintenance
-- **Code transformation**: Java upgrade, .NET modernization
-- **AWS Transform agents**: VMware, Mainframe, .NET migration
+#### 5. Amazon SageMaker – Unified Studio
 
-### Những Gì Học Được
+- Môi trường hợp nhất cho Data, Analytics và AI, hỗ trợ kiến trúc Lakehouse
+- Tích hợp MLOps toàn diện (Pipelines, Registry, Monitoring) giúp tăng tốc đưa ứng dụng GenAI ra thị trường
 
-#### Tư Duy Thiết Kế
+### III. BÀI HỌC & TƯ DUY ĐÚC KẾT
 
-- **Business-first approach**: Luôn bắt đầu từ business domain, không phải technology
-- **Ubiquitous language**: Importance của common vocabulary giữa business và tech teams
-- **Bounded contexts**: Cách identify và manage complexity trong large systems
+Từ các nội dung trên, tôi rút ra được 3 bài học cốt lõi cho việc phát triển dự án:
 
-#### Kiến Trúc Kỹ Thuật
+#### Tư duy Thiết kế (Design Mindset):
 
-- **Event storming technique**: Phương pháp thực tế để mô hình hóa quy trình kinh doanh
-- Sử dụng **Event-driven communication** thay vì synchronous calls
-- **Integration patterns**: Hiểu khi nào dùng sync, async, pub/sub, streaming
-- **Compute spectrum**: Criteria chọn từ VM → containers → serverless
+- Cần xây dựng hệ thống Data & AI theo tư duy "End-to-End" ngay từ đầu, tránh rời rạc
+- Nguyên tắc quản trị (Governance) phải đi đôi với khả năng tự phục vụ (Self-service)
 
-#### Chiến Lược Hiện Đại Hóa
+#### Kiến trúc Kỹ thuật (Technical Architecture):
 
-- **Phased approach**: Không rush, phải có roadmap rõ ràng
-- **7Rs framework**: Nhiều con đường khác nhau tùy thuộc vào đặc điểm của mỗi ứng dụng
-- **ROI measurement**: Cost reduction + business agility
+- Tận dụng tối đa Zero-ETL (tích hợp S3 $\leftrightarrow$ Redshift/Aurora/DynamoDB) để giảm thiểu công sức vận hành đường ống dữ liệu
+- Sử dụng AI Agents để tự động hóa quy trình thay vì chỉ dùng AI như một công cụ chat bot thông thường
 
-### Ứng Dụng Vào Công Việc
+#### Độ tin cậy và Chính xác:
 
-- **Áp dụng DDD** cho project hiện tại: Event storming sessions với business team
-- **Refactor microservices**: Sử dụng bounded contexts để identify service boundaries
-- **Implement event-driven patterns**: Thay thế một số sync calls bằng async messaging
-- **Serverless adoption**: Pilot AWS Lambda cho một số use cases phù hợp
-- **Try Amazon Q Developer**: Integrate vào development workflow để boost productivity
+- Để giảm ảo giác (Hallucination) của AI, bắt buộc phải phối hợp: Prompt Engineering + RAG + Fine-tuning
+- Quy trình RAG chuẩn: $Input \rightarrow Embedding \rightarrow Context \rightarrow LLM \rightarrow Output$
 
-### Trải nghiệm trong event
+### IV. KẾ HOẠCH ỨNG DỤNG VÀO CÔNG VIỆC
 
-Tham gia workshop **“GenAI-powered App-DB Modernization”** là một trải nghiệm rất bổ ích, giúp tôi có cái nhìn toàn diện về cách hiện đại hóa ứng dụng và cơ sở dữ liệu bằng các phương pháp và công cụ hiện đại. Một số trải nghiệm nổi bật:
+Dựa trên kiến thức đã học, tôi đề xuất các hướng ứng dụng cụ thể:
 
-#### Học hỏi từ các diễn giả có chuyên môn cao
-- Các diễn giả đến từ AWS và các tổ chức công nghệ lớn đã chia sẻ **best practices** trong thiết kế ứng dụng hiện đại.
-- Qua các case study thực tế, tôi hiểu rõ hơn cách áp dụng **Domain-Driven Design (DDD)** và **Event-Driven Architecture** vào các project lớn.
+#### 1. Đối với dự án hiện tại
 
-#### Trải nghiệm kỹ thuật thực tế
-- Tham gia các phiên trình bày về **event storming** giúp tôi hình dung cách **mô hình hóa quy trình kinh doanh** thành các domain events.
-- Học cách **phân tách microservices** và xác định **bounded contexts** để quản lý sự phức tạp của hệ thống lớn.
-- Hiểu rõ trade-offs giữa **synchronous và asynchronous communication** cũng như các pattern tích hợp như **pub/sub, point-to-point, streaming**.
+- **Tính năng:** Thử nghiệm tích hợp AI Agents vào quy trình Chăm sóc khách hàng (Customer Support) và Hỗ trợ đăng ký/đăng nhập
+- **An toàn:** Áp dụng Bedrock Guardrails và các lớp validate để đảm bảo AI không trả lời các nội dung nhạy cảm hoặc sai lệch
 
-#### Ứng dụng công cụ hiện đại
-- Trực tiếp tìm hiểu về **Amazon Q Developer**, công cụ AI hỗ trợ SDLC từ lập kế hoạch đến maintenance.
-- Học cách **tự động hóa code transformation** và pilot serverless với **AWS Lambda**, từ đó nâng cao năng suất phát triển.
+#### 2. Đối với quy trình phát triển (Team & Learning)
 
-#### Kết nối và trao đổi
-- Workshop tạo cơ hội trao đổi trực tiếp với các chuyên gia, đồng nghiệp và team business, giúp **nâng cao ngôn ngữ chung (ubiquitous language)** giữa business và tech.
-- Qua các ví dụ thực tế, tôi nhận ra tầm quan trọng của **business-first approach**, luôn bắt đầu từ nhu cầu kinh doanh thay vì chỉ tập trung vào công nghệ.
+- **Mô hình AI-DLC:** Phân chia rõ ràng nhiệm vụ: AI chịu trách nhiệm sinh mã nguồn (generate code) và viết tài liệu (docs); con người tập trung vào Review và Approve (phê duyệt)
+- **Hạ tầng:** Cân nhắc kỹ lưỡng việc sử dụng Serverless (AWS Lambda) cho các tác vụ ngắn hạn so với Container (ECS/Fargate) cho các tác vụ dài hạn/phức tạp
 
-#### Bài học rút ra
-- Việc áp dụng DDD và event-driven patterns giúp giảm **coupling**, tăng **scalability** và **resilience** cho hệ thống.
-- Chiến lược hiện đại hóa cần **phased approach** và đo lường **ROI**, không nên vội vàng chuyển đổi toàn bộ hệ thống.
-- Các công cụ AI như Amazon Q Developer có thể **boost productivity** nếu được tích hợp vào workflow phát triển hiện tại.
+#### 3. Định hướng cá nhân (Vai trò Intern/Developer)
+
+- **Business-First:** Luôn đặt câu hỏi "Giá trị nghiệp vụ là gì?" trước khi viết code hoặc thu thập yêu cầu. Công nghệ phải phục vụ mục tiêu kinh doanh
+- **Data Mindset:** Nhận thức rõ rằng một nền tảng dữ liệu sạch và có cấu trúc là điều kiện tiên quyết để GenAI hoạt động hiệu quả
+
+### V. TRẢI NGHIỆM & ĐÁNH GIÁ
+
+Điểm nhấn lớn nhất của sự kiện là workshop "GenAI-powered App-DB Modernization". Đây là cơ hội quý giá để thực hành hiện đại hóa cơ sở dữ liệu và ứng dụng.
+
+- **Về chuyên môn:** Tôi đã hiểu rõ cách thiết kế một pipeline dữ liệu hoàn chỉnh và cách cân bằng giữa sức mạnh của AI với sự kiểm soát của con người (Human-in-the-loop)
+- **Về công cụ:** Đã được tiếp cận thực tế với Amazon Bedrock, AgentCore và SageMaker Unified Studio
+- **Về kết nối:** Việc trao đổi với các chuyên gia AWS giúp tôi mở rộng góc nhìn về các bài toán thực tế (Use cases) và cách giải quyết vấn đề ở quy mô doanh nghiệp
 
 #### Một số hình ảnh khi tham gia sự kiện
-* Thêm các hình ảnh của các bạn tại đây
-> Tổng thể, sự kiện không chỉ cung cấp kiến thức kỹ thuật mà còn giúp tôi thay đổi cách tư duy về thiết kế ứng dụng, hiện đại hóa hệ thống và phối hợp hiệu quả hơn giữa các team.
+* Thêm các hình ảnh của bạn tại đây
+
+> **Tổng kết:** GenAI không chỉ là một công cụ, mà đòi hỏi một chiến lược tổng thể từ Dữ liệu, Bảo mật đến Kiến trúc. Việc áp dụng AI Agents và mô hình AI-DLC sẽ là chìa khóa để nâng cao năng suất và thay đổi cách vận hành hệ thống trong tương lai gần.

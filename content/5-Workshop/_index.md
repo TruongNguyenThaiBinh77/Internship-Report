@@ -4,27 +4,31 @@ weight: 5
 chapter: false
 pre: " <b> 5. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
 
-# Secure Hybrid Access to S3 using VPC Endpoints
+# Building an EV Rental AI Agent with AWS Bedrock
 
 #### Overview
 
-**AWS PrivateLink** provides private connectivity to AWS services from VPCs and your on-premises networks, without exposing your traffic to the Public Internet.
+**EV Rental AI Agent** is an intelligent chatbot built to assist customers in the VinFast electric vehicle rental system. This workshop demonstrates how to leverage **AWS Bedrock**, **Claude 3.5 Sonnet**, and **Knowledge Bases** to create a conversational AI that can:
 
-In this lab, you will learn how to create, configure, and test VPC endpoints that enable your workloads to reach AWS services without traversing the Public Internet.
+- Answer natural language questions in Vietnamese
+- Automatically search information from multiple sources
+- Display data as interactive cards in the chat interface
+- Retrieve available vehicles and charging stations
+- Access rental policies and FAQs from a knowledge base
 
-You will create two types of endpoints to access Amazon S3: a Gateway VPC endpoint, and an Interface VPC endpoint. These two types of VPC endpoints offer different benefits depending on if you are accessing Amazon S3 from the cloud or your on-premises location
-+ **Gateway** - Create a gateway endpoint to send traffic to Amazon S3 or DynamoDB using private IP addresses.You route traffic from your VPC to the gateway endpoint using route tables.
-+ **Interface** - Create an interface endpoint to send traffic to endpoint services that use a Network Load Balancer to distribute traffic. Traffic destined for the endpoint service is resolved using DNS.
+In this workshop, you will learn how to:
++ **Setup AWS Bedrock** - Enable AI models and create a Knowledge Base for document retrieval
++ **Deploy Backend API** - Build a FastAPI server with Strands Agent SDK for intelligent tool selection
++ **Deploy Frontend** - Create a React chat interface with Chakra UI components
++ **Test the System** - Interact with the AI agent and verify all functionalities
 
 #### Content
 
-1. [Workshop overview](5.1-Workshop-overview)
-2. [Prerequiste](5.2-Prerequiste/)
-3. [Access S3 from VPC](5.3-S3-vpc/)
-4. [Access S3 from On-premises](5.4-S3-onprem/)
-5. [VPC Endpoint Policies (Bonus)](5.5-Policy/)
-6. [Clean up](5.6-Cleanup/)
+1. [Workshop Overview](5.1-Workshop-overview/)
+2. [Prerequisites](5.2-Prerequiste/)
+3. [Setup AWS Bedrock](5.3-Setup-Bedrock/)
+4. [Deploy Backend API](5.4-Deploy-Backend/)
+5. [Deploy Frontend](5.5-Deploy-Frontend/)
+6. [Testing the AI Agent](5.6-Testing/)
+7. [Clean Up Resources](5.7-Cleanup/)

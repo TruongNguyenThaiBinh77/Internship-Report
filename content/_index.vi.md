@@ -6,13 +6,13 @@ chapter: false
 
 # Báo cáo thực tập
 ### Thông tin sinh viên:
-&emsp; **Họ và tên:** Nguyễn Văn A
+&emsp; **Họ và tên:** Trương Nguyễn Thái Bình
 
-&emsp; **Số điện thoại:** 0989888999
+&emsp; **Số điện thoại:** 0869371050
 
-&emsp; **Email:** Anguyenvan@gmail.com
+&emsp; **Email:** binhtntse182370@fpt.edu.vn
 
-&emsp; **Trường:** Đại học Sư phạm Kỹ thuật TP.HCM
+&emsp; **Trường:** Đại học FPT Thành phố Hồ Chí Minh
 
 &emsp; **Ngành:** Công nghệ thông tin
 
@@ -22,7 +22,7 @@ chapter: false
 
 &emsp; **Vị trí thực tập:** FCJ Cloud Intern
 
-&emsp; **Thời gian thực tập:** Từ ngày 12/08/2025 đến ngày 12/11/2025
+&emsp; **Thời gian thực tập:** Từ ngày 12/08/2025 đến ngày 12/12/2025
 
 ![Ảnh đại diện của bạn](/images/avatar.png)
 

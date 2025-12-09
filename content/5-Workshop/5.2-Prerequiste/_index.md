@@ -1,241 +1,208 @@
 ---
-title : "Prerequiste"
+title : "Prerequisites"
 weight : 2 
 chapter : false
 pre : " <b> 5.2. </b> "
 ---
 
-#### IAM permissions
-Add the following IAM permission policy to your user account to deploy and cleanup this workshop.
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "cloudformation:*",
-                "cloudwatch:*",
-                "ec2:AcceptTransitGatewayPeeringAttachment",
-                "ec2:AcceptTransitGatewayVpcAttachment",
-                "ec2:AllocateAddress",
-                "ec2:AssociateAddress",
-                "ec2:AssociateIamInstanceProfile",
-                "ec2:AssociateRouteTable",
-                "ec2:AssociateSubnetCidrBlock",
-                "ec2:AssociateTransitGatewayRouteTable",
-                "ec2:AssociateVpcCidrBlock",
-                "ec2:AttachInternetGateway",
-                "ec2:AttachNetworkInterface",
-                "ec2:AttachVolume",
-                "ec2:AttachVpnGateway",
-                "ec2:AuthorizeSecurityGroupEgress",
-                "ec2:AuthorizeSecurityGroupIngress",
-                "ec2:CreateClientVpnEndpoint",
-                "ec2:CreateClientVpnRoute",
-                "ec2:CreateCustomerGateway",
-                "ec2:CreateDhcpOptions",
-                "ec2:CreateFlowLogs",
-                "ec2:CreateInternetGateway",
-                "ec2:CreateLaunchTemplate",
-                "ec2:CreateNetworkAcl",
-                "ec2:CreateNetworkInterface",
-                "ec2:CreateNetworkInterfacePermission",
-                "ec2:CreateRoute",
-                "ec2:CreateRouteTable",
-                "ec2:CreateSecurityGroup",
-                "ec2:CreateSubnet",
-                "ec2:CreateSubnetCidrReservation",
-                "ec2:CreateTags",
-                "ec2:CreateTransitGateway",
-                "ec2:CreateTransitGatewayPeeringAttachment",
-                "ec2:CreateTransitGatewayPrefixListReference",
-                "ec2:CreateTransitGatewayRoute",
-                "ec2:CreateTransitGatewayRouteTable",
-                "ec2:CreateTransitGatewayVpcAttachment",
-                "ec2:CreateVpc",
-                "ec2:CreateVpcEndpoint",
-                "ec2:CreateVpcEndpointConnectionNotification",
-                "ec2:CreateVpcEndpointServiceConfiguration",
-                "ec2:CreateVpnConnection",
-                "ec2:CreateVpnConnectionRoute",
-                "ec2:CreateVpnGateway",
-                "ec2:DeleteCustomerGateway",
-                "ec2:DeleteFlowLogs",
-                "ec2:DeleteInternetGateway",
-                "ec2:DeleteNetworkInterface",
-                "ec2:DeleteNetworkInterfacePermission",
-                "ec2:DeleteRoute",
-                "ec2:DeleteRouteTable",
-                "ec2:DeleteSecurityGroup",
-                "ec2:DeleteSubnet",
-                "ec2:DeleteSubnetCidrReservation",
-                "ec2:DeleteTags",
-                "ec2:DeleteTransitGateway",
-                "ec2:DeleteTransitGatewayPeeringAttachment",
-                "ec2:DeleteTransitGatewayPrefixListReference",
-                "ec2:DeleteTransitGatewayRoute",
-                "ec2:DeleteTransitGatewayRouteTable",
-                "ec2:DeleteTransitGatewayVpcAttachment",
-                "ec2:DeleteVpc",
-                "ec2:DeleteVpcEndpoints",
-                "ec2:DeleteVpcEndpointServiceConfigurations",
-                "ec2:DeleteVpnConnection",
-                "ec2:DeleteVpnConnectionRoute",
-                "ec2:Describe*",
-                "ec2:DetachInternetGateway",
-                "ec2:DisassociateAddress",
-                "ec2:DisassociateRouteTable",
-                "ec2:GetLaunchTemplateData",
-                "ec2:GetTransitGatewayAttachmentPropagations",
-                "ec2:ModifyInstanceAttribute",
-                "ec2:ModifySecurityGroupRules",
-                "ec2:ModifyTransitGatewayVpcAttachment",
-                "ec2:ModifyVpcAttribute",
-                "ec2:ModifyVpcEndpoint",
-                "ec2:ReleaseAddress",
-                "ec2:ReplaceRoute",
-                "ec2:RevokeSecurityGroupEgress",
-                "ec2:RevokeSecurityGroupIngress",
-                "ec2:RunInstances",
-                "ec2:StartInstances",
-                "ec2:StopInstances",
-                "ec2:UpdateSecurityGroupRuleDescriptionsEgress",
-                "ec2:UpdateSecurityGroupRuleDescriptionsIngress",
-                "iam:AddRoleToInstanceProfile",
-                "iam:AttachRolePolicy",
-                "iam:CreateInstanceProfile",
-                "iam:CreatePolicy",
-                "iam:CreateRole",
-                "iam:DeleteInstanceProfile",
-                "iam:DeletePolicy",
-                "iam:DeleteRole",
-                "iam:DeleteRolePolicy",
-                "iam:DetachRolePolicy",
-                "iam:GetInstanceProfile",
-                "iam:GetPolicy",
-                "iam:GetRole",
-                "iam:GetRolePolicy",
-                "iam:ListPolicyVersions",
-                "iam:ListRoles",
-                "iam:PassRole",
-                "iam:PutRolePolicy",
-                "iam:RemoveRoleFromInstanceProfile",
-                "lambda:CreateFunction",
-                "lambda:DeleteFunction",
-                "lambda:DeleteLayerVersion",
-                "lambda:GetFunction",
-                "lambda:GetLayerVersion",
-                "lambda:InvokeFunction",
-                "lambda:PublishLayerVersion",
-                "logs:CreateLogGroup",
-                "logs:DeleteLogGroup",
-                "logs:DescribeLogGroups",
-                "logs:PutRetentionPolicy",
-                "route53:ChangeTagsForResource",
-                "route53:CreateHealthCheck",
-                "route53:CreateHostedZone",
-                "route53:CreateTrafficPolicy",
-                "route53:DeleteHostedZone",
-                "route53:DisassociateVPCFromHostedZone",
-                "route53:GetHostedZone",
-                "route53:ListHostedZones",
-                "route53domains:ListDomains",
-                "route53domains:ListOperations",
-                "route53domains:ListTagsForDomain",
-                "route53resolver:AssociateResolverEndpointIpAddress",
-                "route53resolver:AssociateResolverRule",
-                "route53resolver:CreateResolverEndpoint",
-                "route53resolver:CreateResolverRule",
-                "route53resolver:DeleteResolverEndpoint",
-                "route53resolver:DeleteResolverRule",
-                "route53resolver:DisassociateResolverEndpointIpAddress",
-                "route53resolver:DisassociateResolverRule",
-                "route53resolver:GetResolverEndpoint",
-                "route53resolver:GetResolverRule",
-                "route53resolver:ListResolverEndpointIpAddresses",
-                "route53resolver:ListResolverEndpoints",
-                "route53resolver:ListResolverRuleAssociations",
-                "route53resolver:ListResolverRules",
-                "route53resolver:ListTagsForResource",
-                "route53resolver:UpdateResolverEndpoint",
-                "route53resolver:UpdateResolverRule",
-                "s3:AbortMultipartUpload",
-                "s3:CreateBucket",
-                "s3:DeleteBucket",
-                "s3:DeleteObject",
-                "s3:GetAccountPublicAccessBlock",
-                "s3:GetBucketAcl",
-                "s3:GetBucketOwnershipControls",
-                "s3:GetBucketPolicy",
-                "s3:GetBucketPolicyStatus",
-                "s3:GetBucketPublicAccessBlock",
-                "s3:GetObject",
-                "s3:GetObjectVersion",
-                "s3:GetBucketVersioning",
-                "s3:ListAccessPoints",
-                "s3:ListAccessPointsForObjectLambda",
-                "s3:ListAllMyBuckets",
-                "s3:ListBucket",
-                "s3:ListBucketMultipartUploads",
-                "s3:ListBucketVersions",
-                "s3:ListJobs",
-                "s3:ListMultipartUploadParts",
-                "s3:ListMultiRegionAccessPoints",
-                "s3:ListStorageLensConfigurations",
-                "s3:PutAccountPublicAccessBlock",
-                "s3:PutBucketAcl",
-                "s3:PutBucketPolicy",
-                "s3:PutBucketPublicAccessBlock",
-                "s3:PutObject",
-                "secretsmanager:CreateSecret",
-                "secretsmanager:DeleteSecret",
-                "secretsmanager:DescribeSecret",
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:ListSecrets",
-                "secretsmanager:ListSecretVersionIds",
-                "secretsmanager:PutResourcePolicy",
-                "secretsmanager:TagResource",
-                "secretsmanager:UpdateSecret",
-                "sns:ListTopics",
-                "ssm:DescribeInstanceProperties",
-                "ssm:DescribeSessions",
-                "ssm:GetConnectionStatus",
-                "ssm:GetParameters",
-                "ssm:ListAssociations",
-                "ssm:ResumeSession",
-                "ssm:StartSession",
-                "ssm:TerminateSession"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
+## Prerequisites for EV Rental AI Agent Workshop
 
+Before starting this workshop, ensure you have the following requirements ready:
+
+### 1. AWS Account
+
+You need an **AWS Account** with appropriate permissions to:
+- Access AWS Bedrock service
+- Create and manage IAM users
+- Create S3 buckets (for Knowledge Base)
+- Create Knowledge Bases
+
+**Note:** Bedrock is available in specific regions. Recommended regions:
+- `us-west-2` (Oregon)
+- `us-east-1` (N. Virginia)  
+- `ap-southeast-1` (Singapore)
+
+
+### 2. IAM User with Bedrock Permissions
+
+You need to create an IAM User with AWS Bedrock access for your application.
+
+**Step 1: Create IAM User**
+1. Go to **AWS Console → IAM → Users → Create User**
+
+![AWS](/images/5-Workshop/5.2-Prerequiste/image.png)
+
+![AWS](/images/5-Workshop/5.2-Prerequiste/image-1.png)
+
+2. User name: `bedrock-agent-user`
+3. ✅ Check: **Provide user access to the AWS Management Console** (optional)
+4. ✅ Select: **I want to create an IAM user**
+5. Click **Next**
+
+**Step 2: Attach Permissions**
+1. Select: **Attach policies directly**
+2. Search and select these policies:
+   - ✅ `AmazonBedrockFullAccess` - Full access to Bedrock models and Knowledge Bases
+   - ✅ (Optional) `AmazonS3ReadOnlyAccess` - If using Knowledge Base with S3
+3. Click **Next** → **Create User**
+
+![AWS](/images/5-Workshop/5.2-Prerequiste/image-2.png)
+
+**Step 3: Create Access Keys**
+1. Click on the newly created user: `bedrock-agent-user`
+2. Go to **Security credentials** tab
+3. Scroll down to **Access keys** → Click **Create access key**
+4. Select use case: **Application running outside AWS**
+5. Click **Next** → **Create access key**
+6. ⚠️ **IMPORTANT**: Copy and save:
+   - `Access Key ID` (example: `AKIAIOSFODNN7EXAMPLE`)
+   - `Secret Access Key` (shown only once, example: `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`)
+7. Click **Done**
+
+![AWS](/images/5-Workshop/5.2-Prerequiste/image-3.png)
+
+⚠️ **Security Note:**
+```bash
+# Save to .env file (DO NOT commit to Git)
+AWS_ACCESS_KEY_ID=YOUR_ACCESS_KEY_ID_HERE
+AWS_SECRET_ACCESS_KEY=YOUR_SECRET_ACCESS_KEY_HERE
+AWS_REGION=us-west-2
 ```
 
-#### Provision resources using CloudFormation
+### 3. Development Environment
 
-In this lab, we will use **N.Virginia region (us-east-1)**.
+#### 3.1. Python Environment
+- **Python 3.11 or higher**
+- Package manager: `pip`
 
-To prepare the workshop environment, deploy this **CloudFormation Template** (click link): [PrivateLinkWorkshop ](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.us-east-1.amazonaws.com/reinvent-endpoints-builders-session/Nested.yaml&stackName=PLCloudSetup). Accept all of the defaults when deploying the template. 
+**Verify installation:**
+```bash
+python --version
+# Expected: Python 3.11.x or higher
 
-![create stack](/images/5-Workshop/5.2-Prerequisite/create-stack1.png)
+pip --version
+```
 
-+ Tick 2 acknowledgement boxes
-+ Choose **Create stack**
+#### 3.2. Node.js Environment
+- **Node.js 18+ and npm**
+- Required for React frontend
 
-![create stack](/images/5-Workshop/5.2-Prerequisite/create-stack2.png)
+**Verify installation:**
+```bash
+node --version
+# Expected: v18.x.x or higher
 
-The **ClouddFormation** deployment requires about 15 minutes to complete.
+npm --version
+```
 
-![complete](/images/5-Workshop/5.2-Prerequisite/complete.png)
+#### 3.3. PostgreSQL Database
+- **PostgreSQL 14+ installed locally** or use Docker
 
-+ **2 VPCs** have been created
+**Option 1: Install locally**
+- Download from: https://www.postgresql.org/download/
+- Create database: `ev_rental_db`
 
-![vpcs](/images/5-Workshop/5.2-Prerequisite/vpcs.png)
+**Option 2: Use Docker**
+```bash
+docker run -d \
+  --name postgres-ev \
+  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_DB=ev_rental_db \
+  -p 5432:5432 \
+  postgres:14
+```
+**Verify PostgreSQL:**
+```bash
+# Check PostgreSQL is running
+psql --version
 
-+ **3 EC2s** have been created
+# Connect to database
+psql -U postgres -d ev_rental_db
+```
 
-![EC2](/images/5-Workshop/5.2-Prerequisite/ec2.png)
+### 4. Code Editor & Tools
+
+- **VS Code** or your preferred IDE
+- **Git** for cloning repositories
+- **Postman** or **cURL** for API testing (optional)
+
+**Install VS Code:**
+- Download from: https://code.visualstudio.com/
+
+**Install Git:**
+```bash
+# macOS
+brew install git
+
+# Windows
+# Download from: https://git-scm.com/download/win
+
+# Verify
+git --version
+```
+
+### 5. AWS CLI (Optional)
+
+Install AWS CLI to interact with AWS services from command line:
+
+```bash
+# macOS/Linux
+curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+sudo installer -pkg AWSCLIV2.pkg -target /
+
+# Windows
+# Download from: https://awscli.amazonaws.com/AWSCLIV2.msi
+
+# Verify
+aws --version
+```
+
+**Configure AWS CLI:**
+```bash
+aws configure
+# Enter your Access Key ID: AKIA5GPEMGJZK6E7PMEB
+# Enter your Secret Access Key: (paste your secret key)
+# Default region name: us-west-2
+# Default output format: json
+```
+
+**Test AWS CLI:**
+```bash
+# List available Bedrock models
+aws bedrock list-foundation-models --region us-west-2
+
+# Check your identity
+aws sts get-caller-identity
+```
+
+### Prerequisites Checklist
+
+Before proceeding to the next step, ensure you have:
+
+- ✅ AWS Account with Bedrock access in supported region
+- ✅ IAM User created with `AmazonBedrockFullAccess` policy
+- ✅ Access Key ID and Secret Access Key saved securely
+- ✅ Python 3.11+ installed and verified
+- ✅ Node.js 18+ and npm installed and verified
+- ✅ PostgreSQL 14+ database running
+- ✅ Code editor (VS Code recommended) installed
+- ✅ Git installed and configured
+- ✅ (Optional) AWS CLI installed and configured
+
+### Estimated Costs
+
+This workshop uses the following AWS services:
+
+| Service | Estimated Cost | Notes |
+|---------|---------------|-------|
+| **AWS Bedrock - Claude 3.5 Sonnet** | ~$0.50 - $2.00 | Pay per API call (input/output tokens) |
+| **AWS Bedrock - Knowledge Base** | ~$0.10 - $0.50 | Vector storage + retrieval |
+| **S3 Storage** | ~$0.02 | Minimal for documents |
+| **Data Transfer** | ~$0.05 | Usually within free tier |
+| **Total** | ~$0.67 - $2.57 | For the entire workshop |
+
+💡 **Tip:** Remember to clean up resources after the workshop to avoid ongoing charges!
+
+---
+
+**Next:** Proceed to [Setup AWS Bedrock](../5.3-Setup-Bedrock/) to enable models and create Knowledge Base.
