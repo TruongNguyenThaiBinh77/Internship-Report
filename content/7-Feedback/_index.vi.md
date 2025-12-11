@@ -50,6 +50,6 @@ Cảm ơn Team FCJ và các Mentor đã tạo ra một sân chơi quá bổ ích
 
 Khép lại hành trình tại FCJ, em muốn gửi lời cảm ơn sâu sắc nhất đến những người dẫn đường tâm huyết đã giúp em hoàn thành chặng đường này một cách trọn vẹn.
 
-Đặc biệt tri ân các anh: Nguyễn Gia Hưng, Văn Hoàng Kha, Lữ Hoàn Thiện, Nguyễn Tuấn Thịnh, Lê Nguyễn Vũ Hoàng và Nguyễn Đồng Thanh Hiệp. Cảm ơn các anh đã luôn support nhiệt tình bất kể ngày đêm, từ những quy trình nhỏ nhất đến việc định hướng tư duy chiến lược.
+Đặc biệt tri ân các anh: Nguyễn Gia Hưng, Văn Hoàng Kha và các anh mentor. Cảm ơn các anh đã luôn support nhiệt tình bất kể ngày đêm, từ những quy trình nhỏ nhất đến việc định hướng tư duy chiến lược.
 
 Sự kiên nhẫn và động viên của các anh chính là hành trang quý giá nhất mà em nhận được. Chúc đội ngũ Admin và Mentor của FCJ luôn mạnh khỏe và thành công!
