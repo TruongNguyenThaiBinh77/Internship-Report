@@ -1,0 +1,833 @@
+
+Báo Cáo Nghiên Cứu Chuyên Sâu: Nhật Ký Triển Khai và Lộ Trình Năng Lực Điện Toán Đám Mây (First Cloud Journey)
+
+
+Tóm Tắt Điều Hành
+
+Báo cáo này cung cấp một bản phân tích kỹ thuật toàn diện và nhật ký công việc chi tiết (worklog) cho chương trình "First Cloud Journey". Được thiết kế như một lộ trình phát triển năng lực kéo dài ba tháng, từ ngày 8 tháng 9 năm 2025 đến ngày 7 tháng 12 năm 2025, báo cáo này mô phỏng quá trình chuyển đổi của một kiến trúc sư hệ thống từ các khái niệm cơ bản về đám mây sang việc triển khai các kiến trúc hiện đại, phức tạp trên Amazon Web Services (AWS).
+Dựa trên dữ liệu từ các mô-đun đào tạo của chương trình 1, báo cáo đi sâu vào các khía cạnh kỹ thuật của từng dịch vụ, từ Explore AWS Services, Migrate, Optimize, Modernize, đến Data & Analytics và AI/ML. Báo cáo loại bỏ các nội dung "Coming Soon" để tập trung vào các năng lực thực thi ngay lập tức. Cấu trúc của tài liệu được trình bày dưới dạng nhật ký kỹ thuật hàng ngày, kết hợp lý thuyết kiến trúc với thực hành triển khai, đồng thời cung cấp các phân tích chuyên sâu về lý do tại sao (Why) và làm thế nào (How) các dịch vụ này tương tác để tạo nên các giải pháp cấp doanh nghiệp.
+
+Phần 1: Xây Dựng Nền Tảng Hạ Tầng Số (Tháng 9/2025)
+
+Tháng đầu tiên tập trung vào việc thiết lập "Landing Zone" an toàn và hiểu rõ các khối xây dựng cơ bản của đám mây: Định danh, Mạng, Điện toán và Lưu trữ. Đây là giai đoạn quan trọng nhất, vì các lỗi cấu hình trong giai đoạn này thường dẫn đến các lỗ hổng bảo mật và nợ kỹ thuật khó khắc phục sau này.
+
+Tuần 1: Quản trị Định danh và Kiến trúc Mạng (08/09 – 12/09)
+
+Mục tiêu: Thiết lập tài khoản AWS chuẩn doanh nghiệp và xây dựng mạng đám mây ảo (VPC) bảo mật.
+
+Ngày 1 (08/09): Khởi tạo Tài khoản và Quản lý Chi phí
+
+Hoạt động Kỹ thuật:
+Khởi tạo AWS Account: Bắt đầu hành trình bằng việc tạo tài khoản AWS mới.1 Trọng tâm không chỉ là đăng ký, mà là quy trình bảo mật tài khoản gốc (Root User). Việc kích hoạt xác thực đa yếu tố (MFA) cho tài khoản gốc là bước bắt buộc đầu tiên để ngăn chặn rủi ro chiếm quyền điều khiển toàn bộ hạ tầng.
+Thiết lập Ngân sách (AWS Budgets): Để đảm bảo kiểm soát tài chính ngay từ ngày đầu, hệ thống AWS Budgets được cấu hình.1
+Cấu hình: Thiết lập ngân sách chi phí hàng tháng (Cost Budget) và ngân sách sử dụng (Usage Budget).
+Cảnh báo: Cấu hình Amazon SNS để gửi email cảnh báo khi chi phí thực tế hoặc dự báo vượt quá 80% ngưỡng ngân sách. Điều này thể hiện tư duy "FinOps" ngay từ giai đoạn khởi tạo.
+Cơ chế Hỗ trợ (AWS Support): Nghiên cứu các gói hỗ trợ (Basic, Developer, Business) và quy trình mở ticket hỗ trợ kỹ thuật.4 Việc hiểu rõ SLA (Service Level Agreement) của từng gói giúp định hình chiến lược vận hành sau này.
+
+Ngày 2 (09/09): Quản lý Định danh và Truy cập (IAM) - Phần 1
+
+Hoạt động Kỹ thuật:
+Nguyên tắc Đặc quyền Tối thiểu: Đi sâu vào dịch vụ IAM.1 Thay vì sử dụng tài khoản Root, việc tạo tài khoản IAM User cho quản trị viên được thực hiện.
+Nhóm và Chính sách (Groups & Policies): Tạo các nhóm người dùng phân cấp: Admins, Developers, và Auditors.
+Phân tích: Việc gán quyền (Policy) vào Nhóm thay vì từng User riêng lẻ giúp đơn giản hóa việc quản trị khi quy mô nhân sự tăng lên. Sử dụng các Managed Policies như AdministratorAccess cho nhóm Admin và PowerUserAccess cho nhóm Dev.
+Chính sách Mật khẩu: Thiết lập Account Password Policy yêu cầu độ phức tạp, độ dài tối thiểu và chu kỳ xoay vòng mật khẩu, tuân thủ các tiêu chuẩn bảo mật CIS Benchmark.
+
+Ngày 3 (10/09): Quản lý Định danh và Truy cập (IAM) - Phần 2
+
+Hoạt động Kỹ thuật:
+IAM Roles và Instance Profiles: Chuyển trọng tâm sang bảo mật cho ứng dụng.1
+Triển khai: Tạo IAM Role cho phép EC2 instance truy cập S3. Đây là một mô hình kiến trúc quan trọng: thay vì lưu trữ Access Key/Secret Key cứng trong mã nguồn (hard-coded credentials) - một rủi ro bảo mật lớn, EC2 instance sẽ nhận thông tin xác thực tạm thời thông qua Instance Metadata Service (IMDS).
+Viết Policy Tùy chỉnh (JSON): Thực hành viết các chính sách JSON để giới hạn quyền truy cập ở mức độ hạt nhân (granular). Ví dụ: Chỉ cho phép truy cập vào một Bucket S3 cụ thể trong một khung giờ cụ thể.
+
+Ngày 4 (11/09): Kiến trúc Mạng Ảo (VPC) - Lý thuyết & Thiết kế
+
+Hoạt động Kỹ thuật:
+Tổng quan VPC: Nghiên cứu Networking Essentials with Amazon VPC.1 Phân biệt giữa Default VPC và Custom VPC.
+Quy hoạch IP (CIDR): Thiết kế không gian địa chỉ mạng. Quyết định sử dụng dải 10.0.0.0/16 để cung cấp 65,536 địa chỉ IP, cho phép khả năng mở rộng lớn.
+Phân chia Subnet: Thiết kế mô hình Multi-AZ (Đa vùng sẵn sàng) để đảm bảo tính sẵn sàng cao (High Availability).
+Public Subnets: Dành cho các tài nguyên cần truy cập internet trực tiếp (Load Balancer, Bastion Host).
+Private Subnets: Dành cho các tài nguyên nội bộ (Database, Application Server) để cách ly khỏi internet công cộng.
+
+Ngày 5 (12/09): Triển khai VPC Thực tế
+
+Hoạt động Kỹ thuật:
+Tạo Hạ tầng Mạng: Sử dụng AWS Console để tạo VPC, Subnets, và Internet Gateway (IGW).4
+Bảng Định tuyến (Route Tables): Cấu hình Route Table cho Public Subnet trỏ tới IGW (0.0.0.0/0 -> IGW). Tạo Route Table riêng cho Private Subnet không có đường ra internet trực tiếp.
+NAT Gateway: Để cho phép các instance trong Private Subnet tải bản cập nhật từ internet mà không bị truy cập từ bên ngoài, NAT Gateway được triển khai trong Public Subnet và cấu hình định tuyến tương ứng.
+
+Tuần 2: Điện toán và Lưu trữ Cơ bản (15/09 – 19/09)
+
+Mục tiêu: Triển khai máy chủ ảo (EC2), hiểu về các loại hình lưu trữ (EBS, S3) và các mô hình điện toán đơn giản hóa (Lightsail).
+
+Ngày 1 (15/09): Amazon EC2 - Khởi tạo và Kết nối
+
+Hoạt động Kỹ thuật:
+Compute Essentials: Đi sâu vào dịch vụ Amazon EC2.1
+Lựa chọn Instance Type: Phân tích các họ máy chủ: T3 (Burstable) cho web server nhẹ, C5 (Compute Optimized) cho xử lý dữ liệu, và R5 (Memory Optimized) cho cache/database.
+AMI (Amazon Machine Image): Khởi tạo một instance chạy Amazon Linux 2023.
+SSH & Key Pairs: Quản lý Key Pair (.pem cho Mac/Linux, .ppk cho Windows/Putty). Thực hiện kết nối SSH an toàn vào instance nằm trong Public Subnet.
+
+Ngày 2 (16/09): Lưu trữ Khối (EBS) và Windows Workloads
+
+Hoạt động Kỹ thuật:
+EBS Volumes: Tìm hiểu về Elastic Block Store. Tạo thêm một volume EBS (loại gp3) và thực hiện lệnh mount vào Linux instance đang chạy. Điều này minh họa tính chất "bền vững" của EBS tách biệt với vòng đời của EC2.
+Windows Workloads: Triển khai Windows Workloads on AWS.1 Kết nối qua giao thức RDP. Thực hành cài đặt IIS Web Server trên Windows Server 2022.
+Snapshot: Thực hiện tạo Snapshot cho EBS volume để sao lưu dữ liệu, hiểu cơ chế incremental backup (sao lưu gia tăng) của AWS.
+
+Ngày 3 (17/09): Môi trường Phát triển trên Đám mây (Cloud9)
+
+Hoạt động Kỹ thuật:
+AWS Cloud9: Thiết lập môi trường phát triển tích hợp (IDE) trên trình duyệt.1
+Lợi ích: Cloud9 đi kèm với AWS CLI, SAM, và Docker được cài đặt sẵn. Việc này loại bỏ hoàn toàn ma sát trong việc thiết lập môi trường local ("works on my machine" syndrome).
+Truy cập Từ xa: Trải nghiệm khả năng sửa code và chạy terminal trực tiếp từ trình duyệt mà không cần mở port SSH công khai, nhờ vào kết nối được quản lý bởi AWS.
+
+Ngày 4 (18/09): Lưu trữ Đối tượng (Amazon S3) - Cơ bản
+
+Hoạt động Kỹ thuật:
+S3 Fundamentals: Tìm hiểu mô hình lưu trữ đối tượng (Object Storage) của S3.1 Tạo Bucket và upload các file media.
+Static Website Hosting: Cấu hình Bucket để host một website tĩnh (HTML/CSS/JS).1
+Bucket Policy: Viết chính sách JSON để cho phép công chúng (Public) chỉ có quyền s3:GetObject đối với các file trong bucket, trong khi vẫn chặn quyền List hoặc Put từ bên ngoài.
+
+Ngày 5 (19/09): S3 Nâng cao và Bảo mật
+
+Hoạt động Kỹ thuật:
+Storage Classes: Phân tích các lớp lưu trữ: Standard, Intelligent-Tiering, Standard-IA, và Glacier. Thiết lập Lifecycle Policy để tự động chuyển các object cũ hơn 30 ngày sang Glacier để tiết kiệm chi phí.
+S3 Security Best Practices: Thực hành các phương pháp bảo mật tốt nhất.1
+Bật Block Public Access ở mức Account.
+Bật Versioning để bảo vệ chống lại việc xóa nhầm hoặc ghi đè file.
+Kích hoạt Default Encryption (SSE-S3) để mã hóa dữ liệu khi nghỉ (Data at Rest).
+
+Tuần 3: Cơ sở dữ liệu và Các dịch vụ quản lý (22/09 – 26/09)
+
+Mục tiêu: Chuyển dịch từ việc tự quản lý cơ sở dữ liệu trên EC2 sang sử dụng các dịch vụ Managed Database (RDS, DynamoDB) để giảm tải vận hành.
+
+Ngày 1 (22/09): Cơ sở dữ liệu Quan hệ (Amazon RDS)
+
+Hoạt động Kỹ thuật:
+RDS Essentials: Triển khai Amazon Relational Database Service (RDS).1 Lựa chọn engine MySQL hoặc PostgreSQL.
+Multi-AZ Deployment: Kích hoạt tính năng Multi-AZ để có một bản sao dự phòng (Standby Replica) ở Availability Zone khác.
+Cơ chế: Phân tích cơ chế đồng bộ dữ liệu (Synchronous Replication) giúp đảm bảo tính toàn vẹn dữ liệu khi AZ chính gặp sự cố, hệ thống tự động failover sang AZ phụ mà không cần thay đổi Connection String.
+
+Ngày 2 (23/09): Kết nối và Vận hành RDS
+
+Hoạt động Kỹ thuật:
+Kết nối An toàn: Cấu hình Security Group cho RDS chỉ cho phép kết nối inbound từ Security Group của EC2 Web Server (App-Tier), chặn hoàn toàn truy cập từ internet.
+Parameter Groups: Tùy chỉnh cấu hình DB (như max_connections, time_zone) thông qua Parameter Groups thay vì sửa file my.cnf.
+Backup & Restore: Cấu hình Automated Backups và thực hiện Manual Snapshot. Thử nghiệm quy trình khôi phục (Restore) ra một DB instance mới để kiểm chứng RPO (Recovery Point Objective).
+
+Ngày 3 (24/09): Cơ sở dữ liệu NoSQL (Amazon DynamoDB) - Phần 1
+
+Hoạt động Kỹ thuật:
+NoSQL Essentials: Chuyển sang tư duy phi quan hệ với Amazon DynamoDB.1
+Thiết kế Bảng: Tạo bảng Users với UserId làm Partition Key. Hiểu sự khác biệt cốt lõi giữa SQL (schema cứng) và NoSQL (schema linh hoạt - schemaless).
+Capacity Modes: So sánh chế độ Provisioned (đặt trước RCU/WCU - phù hợp lưu lượng ổn định) và On-Demand (tự động mở rộng - phù hợp lưu lượng khó đoán). Lựa chọn On-Demand cho môi trường development.
+
+Ngày 4 (25/09): DynamoDB Nâng cao - Phần 2
+
+Hoạt động Kỹ thuật:
+Truy vấn Dữ liệu: Thực hành các thao tác API: PutItem, GetItem, Query và Scan.
+Insight: Nhận ra sự kém hiệu quả của lệnh Scan (quét toàn bộ bảng) về mặt chi phí và hiệu năng so với Query (truy vấn dựa trên Key).
+Indexes: Tạo Global Secondary Index (GSI) để hỗ trợ các truy vấn không dựa trên khóa chính (ví dụ: tìm User theo Email thay vì UserId).
+
+Ngày 5 (26/09): Bộ nhớ đệm (Amazon ElastiCache)
+
+Hoạt động Kỹ thuật:
+In-Memory Caching: Triển khai Amazon ElastiCache 1 sử dụng Redis engine.
+Chiến lược Caching: Áp dụng mô hình Lazy Loading (lấy từ cache, nếu miss thì lấy từ DB và ghi vào cache) để giảm tải cho RDS.
+Kiến trúc: Đặt ElastiCache cluster trong Private Subnet để đảm bảo bảo mật và độ trễ thấp nhất khi giao tiếp với ứng dụng.
+
+Tuần 4: Khả năng mở rộng, Giám sát và Mạng phân phối (29/09 – 03/10)
+
+Mục tiêu: Tự động hóa khả năng mở rộng hệ thống, thiết lập "mắt thần" giám sát toàn diện và tối ưu hóa việc phân phối nội dung toàn cầu.
+
+Ngày 1 (29/09): Tự động mở rộng (EC2 Auto Scaling)
+
+Hoạt động Kỹ thuật:
+Launch Templates: Tạo mẫu khởi chạy định nghĩa AMI, Instance Type, Security Group và IAM Role.1
+Auto Scaling Group (ASG): Tạo ASG trỏ vào Launch Template, thiết lập Min=2, Max=4, Desired=2.
+Scaling Policies: Cấu hình Target Tracking Scaling Policy để giữ CPU trung bình ở mức 50%.
+Stress Test: Sử dụng công cụ stress trên Linux để đẩy CPU lên 100% và quan sát ASG tự động khởi chạy thêm instance mới (Scale Out) và ALB tự động đăng ký instance đó để nhận traffic.
+
+Ngày 2 (30/09): Giám sát Hệ thống (Amazon CloudWatch)
+
+Hoạt động Kỹ thuật:
+Metrics: Sử dụng Amazon CloudWatch 1 để theo dõi các chỉ số tiêu chuẩn (CPU, Disk I/O, Network).
+Custom Metrics: Cài đặt CloudWatch Agent lên EC2 để đẩy chỉ số bộ nhớ (Memory Usage) - một chỉ số mà Hypervisor không nhìn thấy được.
+Alarms: Tạo Alarm kích hoạt khi CPU > 80% trong 5 phút. Cấu hình Alarm này gửi thông báo qua SNS (Simple Notification Service) tới email quản trị viên.
+
+Ngày 3 (01/10): Giám sát Nâng cao và Log
+
+Hoạt động Kỹ thuật:
+CloudWatch Logs: Cấu hình CloudWatch Agent để đẩy file log ứng dụng (/var/log/httpd/access_log) lên CloudWatch Logs Group.
+CloudWatch Dashboards: Tạo Dashboard tổng hợp hiển thị sức khỏe của toàn bộ hệ thống (Web, DB, Cache) trên một màn hình duy nhất.1
+Grafana: Tìm hiểu khả năng tích hợp Advanced Monitoring with CloudWatch and Grafana 1 để có khả năng trực quan hóa mạnh mẽ hơn.
+
+Ngày 4 (02/10): Hệ thống Tên miền (Amazon Route 53)
+
+Hoạt động Kỹ thuật:
+DNS Management: Quản lý tên miền với Amazon Route 53.1 Tạo Hosted Zone.
+Routing Policies: Thực hành các chiến lược điều hướng:
+Simple Routing: Trỏ tên miền về IP.
+Failover Routing: Cấu hình Health Check. Nếu Primary Web Server chết, DNS tự động trỏ sang trang bảo trì trên S3 (Static Website).
+Latency-based Routing: Điều hướng người dùng đến Region có độ trễ thấp nhất.
+
+Ngày 5 (03/10): Mạng Phân phối Nội dung (Amazon CloudFront)
+
+Hoạt động Kỹ thuật:
+CDN Setup: Triển khai Amazon CloudFront 1 để phân phối nội dung tĩnh từ S3 với độ trễ thấp trên toàn cầu.
+OAC (Origin Access Control): Cấu hình OAC để đảm bảo người dùng chỉ có thể truy cập nội dung qua CloudFront, không thể truy cập trực tiếp vào S3 Bucket.
+Caching Policies: Tùy chỉnh TTL (Time To Live) để kiểm soát thời gian lưu cache tại Edge Location.
+
+Phần 2: Tối Ưu Hóa, Bảo Mật và Vận Hành (Tháng 10/2025)
+
+Tháng thứ hai nâng tầm từ "xây dựng được" sang "vận hành tốt" (Well-Architected). Trọng tâm chuyển sang Bảo mật chuyên sâu, Tự động hóa hạ tầng (IaC), và các chiến lược Di chuyển (Migration) thực tế.
+
+Tuần 5: Tư duy Vận hành và Hạ tầng dưới dạng Mã (06/10 – 10/10)
+
+Mục tiêu: Loại bỏ thao tác thủ công, quản lý hạm đội máy chủ quy mô lớn và mã hóa hạ tầng.
+
+Ngày 1 (06/10): Quản lý Hệ thống (AWS Systems Manager)
+
+Hoạt động Kỹ thuật:
+SSM Agent: Tìm hiểu AWS Systems Manager (SSM).1 Đảm bảo IAM Role của EC2 có quyền AmazonSSMManagedInstanceCore.
+Run Command: Thực hiện lệnh shell trên hàng loạt instance cùng lúc (ví dụ: update Linux packages) mà không cần SSH vào từng máy.
+Inventory: Tự động thu thập thông tin phần mềm cài đặt trên toàn bộ fleet để phục vụ mục đích kiểm toán (Audit).
+
+Ngày 2 (07/10): Truy cập An toàn (Session Manager)
+
+Hoạt động Kỹ thuật:
+No More SSH: Triển khai Remote Server Access with Systems Manager Session Manager.1
+Bảo mật: Đóng cổng 22 (SSH) trên Security Group. Mọi truy cập console vào instance giờ đây đi qua giao thức HTTPS của Session Manager, được xác thực bởi IAM và log lại toàn bộ phiên làm việc vào S3/CloudWatch Logs. Đây là tiêu chuẩn vàng cho bảo mật truy cập máy chủ.
+
+Ngày 3 (08/10): Hạ tầng dưới dạng Mã (CloudFormation)
+
+Hoạt động Kỹ thuật:
+IaC Concept: Bắt đầu với Infrastructure as Code with AWS CloudFormation.1
+Templates: Viết template định dạng YAML để mô tả một VPC và một EC2 instance.
+Stack Management: Thực hiện tạo Stack, cập nhật Stack (Change Sets) và xóa Stack. Hiểu cơ chế quản lý trạng thái và phát hiện sai lệch (Drift Detection) của CloudFormation.
+
+Ngày 4 (09/10): Bộ công cụ phát triển đám mây (AWS CDK) - Cơ bản
+
+Hoạt động Kỹ thuật:
+Imperative IaC: Chuyển sang AWS CDK Essentials.1 Sử dụng ngôn ngữ lập trình quen thuộc (TypeScript hoặc Python) để định nghĩa hạ tầng thay vì YAML/JSON thuần túy.
+Constructs: Tìm hiểu khái niệm Construct (L1, L2, L3). Sử dụng L2 Construct (High-level) để tạo VPC chỉ với một dòng code, thay vì hàng chục dòng trong CloudFormation.
+
+Ngày 5 (10/10): AWS CDK Nâng cao & Workshop
+
+Hoạt động Kỹ thuật:
+Advanced Patterns: Thực hành AWS CDK Advanced.1 Xây dựng các Construct tùy chỉnh để tái sử dụng trong tổ chức (ví dụ: "StandardS3Bucket" luôn bật mã hóa và versioning).
+Workshop: Tham gia Infrastructure as Code Workshop Series 1 để giải quyết các bài toán thực tế như xử lý phụ thuộc vòng (circular dependencies) và quản lý biến môi trường (Context).
+
+Tuần 6: Kiến trúc Bảo mật Đa lớp (13/10 – 17/10)
+
+Mục tiêu: Xây dựng pháo đài số bảo vệ dữ liệu và ứng dụng trước các mối đe dọa mạng hiện đại.
+
+Ngày 1 (13/10): Tường lửa Ứng dụng Web (AWS WAF)
+
+Hoạt động Kỹ thuật:
+Web ACL: Triển khai Application Protection with AWS WAF.1 Gắn WAF vào Application Load Balancer hoặc CloudFront.
+Rules: Cấu hình các quy tắc để chặn tấn công phổ biến như SQL Injection, Cross-Site Scripting (XSS).
+Rate Limiting: Tạo quy tắc giới hạn tốc độ (Rate-based rule) để chặn các IP gửi quá 100 request/5 phút, giúp giảm thiểu tấn công DDoS tầng ứng dụng.
+
+Ngày 2 (14/10): Quản lý Khóa mã hóa (KMS)
+
+Hoạt động Kỹ thuật:
+Encryption at Rest: Đi sâu vào Encryption with AWS KMS.1
+CMK (Customer Managed Keys): Tạo khóa đối xứng (Symmetric Key) riêng. Cấu hình Key Policy để kiểm soát ai có quyền quản trị khóa và ai có quyền sử dụng khóa để mã hóa/giải mã.
+Tích hợp: Kích hoạt mã hóa EBS Volume và S3 Bucket sử dụng khóa CMK vừa tạo.
+
+Ngày 3 (15/10): Quản lý Bí mật (Secrets Manager)
+
+Hoạt động Kỹ thuật:
+Credential Rotation: Triển khai Credentials Management with AWS Secrets Manager.1
+RDS Integration: Lưu trữ mật khẩu RDS vào Secrets Manager. Cấu hình tính năng tự động xoay vòng mật khẩu (Automatic Rotation) sử dụng Lambda Function có sẵn.
+App Config: Sửa đổi mã nguồn ứng dụng để gọi API lấy mật khẩu từ Secrets Manager thay vì đọc từ file config hay biến môi trường.
+
+Ngày 4 (16/10): Phát hiện Mối đe dọa (GuardDuty)
+
+Hoạt động Kỹ thuật:
+Intelligent Threat Detection: Kích hoạt Threat Detection with AWS GuardDuty.1
+Data Sources: GuardDuty tự động phân tích CloudTrail Events, VPC Flow Logs và DNS Logs sử dụng Machine Learning để phát hiện hành vi bất thường (ví dụ: Instance đào tiền ảo, truy cập từ IP độc hại).
+Response: Cấu hình EventBridge để tự động gửi cảnh báo khi GuardDuty phát hiện mối đe dọa mức độ cao.
+
+Ngày 5 (17/10): Bảo mật Định danh Nâng cao (Cognito)
+
+Hoạt động Kỹ thuật:
+User Pools: Triển khai Cross-Domain Authentication with Amazon Cognito.1 Tạo User Pool để quản lý đăng ký/đăng nhập cho người dùng ứng dụng mobile/web.
+Identity Pools: Cấu hình Identity Pool để trao đổi token xác thực lấy AWS Credentials tạm thời, cho phép người dùng cuối upload file trực tiếp lên S3 mà không cần qua backend server.
+
+Tuần 7: Chiến lược Di chuyển và Khôi phục Thảm họa (20/10 – 24/10)
+
+Mục tiêu: Chuyển đổi tải công việc từ On-Premise lên AWS và đảm bảo tính liên tục trong kinh doanh.
+
+Ngày 1 (20/10): Di chuyển Máy chủ Ảo (VM Import/Export)
+
+Hoạt động Kỹ thuật:
+Lift & Shift: Thực hành VM Migration with AWS VM Import/Export.2
+Quy trình: Giả lập môi trường On-Prem bằng VirtualBox. Xuất máy ảo ra định dạng .ova hoặc .vmdk. Sử dụng AWS CLI để upload lên S3 và import thành AMI (Amazon Machine Image). Khởi chạy EC2 từ AMI này.
+
+Ngày 2 (21/10): Di chuyển Cơ sở dữ liệu (DMS & SCT) - Phần 1
+
+Hoạt động Kỹ thuật:
+Đánh giá & Chuyển đổi: Sử dụng Schema Conversion Tool (SCT).2
+Kịch bản: Chuyển đổi schema của một database Oracle (Source) sang Amazon Aurora PostgreSQL (Target). SCT tự động chuyển đổi bảng, khóa, và chỉ mục, đồng thời báo cáo các phần code (Stored Procedures) cần sửa thủ công.
+
+Ngày 3 (22/10): Di chuyển Cơ sở dữ liệu (DMS) - Phần 2
+
+Hoạt động Kỹ thuật:
+Data Migration: Cấu hình AWS Database Migration Service (DMS).2
+Replication Instance: Tạo máy chủ trung gian thực hiện việc sao chép.
+Endpoints: Cấu hình Source và Target endpoints.
+Tasks: Tạo tác vụ di chuyển dữ liệu (Full Load) và đồng bộ hóa thay đổi liên tục (Change Data Capture - CDC) để giảm thiểu thời gian downtime khi cắt chuyển hệ thống (Cutover).
+
+Ngày 4 (23/10): Khôi phục Thảm họa (Elastic Disaster Recovery)
+
+Hoạt động Kỹ thuật:
+DR Strategy: Triển khai Disaster Recovery with AWS Elastic Disaster Recovery (DRS).2
+Setup: Cài đặt Agent lên máy chủ nguồn. DRS sẽ liên tục sao chép dữ liệu block-level sang một vùng đệm (Staging Area) trên AWS.
+Drill: Thực hiện diễn tập DR (Recovery Drill) - khởi chạy instance từ dữ liệu sao chép để kiểm tra tính toàn vẹn mà không ảnh hưởng đến luồng sao chép chính.
+
+Ngày 5 (24/10): Sao lưu Dữ liệu Tập trung (AWS Backup)
+
+Hoạt động Kỹ thuật:
+Centralized Backup: Sử dụng Data Protection with AWS Backup.1
+Backup Plan: Tạo kế hoạch sao lưu định kỳ cho EC2, EBS, RDS, và DynamoDB trong cùng một giao diện.
+Cross-Region Copy: Cấu hình tự động sao chép bản backup sang một Region khác để phòng chống thảm họa thiên tai tại Region chính.
+
+Tuần 8: Tối ưu hóa Chi phí AWS & Khởi Động Dự Án Voltgo (27/10 – 31/10)
+
+Mục tiêu kép: Tiếp tục học tập về tối ưu hóa chi phí và mạng nâng cao trên AWS, đồng thời bắt đầu triển khai dự án Voltgo với vai trò Frontend Developer.
+
+=== PHẦN A: AWS - Tối ưu hóa Chi phí và Mạng nâng cao ===
+
+Ngày 1 (27/10): Phân tích Chi phí (Cost Explorer & CUR)
+
+Hoạt động Kỹ thuật:
+Visibility: Sử dụng Cost Visualization and Analytics.1 Phân tích báo cáo chi phí theo Service, Region, và Tag.
+Granularity: Kích hoạt Cost and Usage Report (CUR) để xuất dữ liệu chi tiết từng giờ ra S3.
+Athena Integration: Sử dụng AWS Glue and Amazon Athena để truy vấn file CUR, trả lời các câu hỏi phức tạp như: "Lượng Data Transfer giữa 2 Instance cụ thể tốn bao nhiêu tiền?".
+
+Ngày 2 (28/10): Tối ưu hóa Tài nguyên (Right-Sizing)
+
+Hoạt động Kỹ thuật:
+Compute Optimizer: Sử dụng Right-Sizing with EC2 Resource Optimization.1 Dựa trên dữ liệu lịch sử 14 ngày, AWS gợi ý các instance đang bị over-provisioned để giảm size.
+Memory Metrics: Tích hợp CloudWatch Agent để Compute Optimizer có thêm dữ liệu về RAM, giúp gợi ý chính xác hơn.
+
+Ngày 3 (29/10): Mô hình Mua hàng (Savings Plans & RIs)
+
+Hoạt động Kỹ thuật:
+Commitment: Nghiên cứu Cost Savings with Savings Plans and Reserved Instances.1
+Strategy: So sánh EC2 Instance Savings Plans và Compute Savings Plans. Lập kế hoạch mua cam kết 1 năm cho phần tải nền (Base Load) của hệ thống.
+
+Ngày 4 (30/10): Mạng Nâng cao - Transit Gateway
+
+Hoạt động Kỹ thuật:
+Hub & Spoke: Triển khai Centralized Network Management with AWS Transit Gateway.1
+Routing: Cấu hình bảng định tuyến của Transit Gateway để kiểm soát luồng đi giữa các VPC.
+
+Ngày 5 (31/10): Giám sát Mạng (VPC Flow Logs)
+
+Hoạt động Kỹ thuật:
+Traffic Analysis: Kích hoạt Network Monitoring with VPC Flow Logs.1
+Debug: Phân tích log để tìm hiểu tại sao kết nối đến Database bị từ chối. Xác định các dòng có trạng thái REJECT để truy ra Security Group hoặc NACL nào đang chặn traffic.
+
+=== PHẦN B: Dự Án Voltgo - Vai trò Frontend Developer ===
+
+Từ tuần 8 trở đi, song song với việc học AWS, tôi bắt đầu tham gia dự án Voltgo - một nền tảng thuê xe điện (electric vehicle rental platform). Với vai trò Frontend Developer, tôi chịu trách nhiệm xây dựng các giao diện chính: User, Login, Booking thuê xe, Blog, Xe, Trạm.
+
+Ngày 1 (27/10): Giới thiệu Dự án Voltgo & Phân tích Yêu cầu
+
+Hoạt động Kỹ thuật:
+Project Kickoff: Tham gia buổi giới thiệu dự án Voltgo - nền tảng thuê xe điện trực tuyến.
+Requirements Analysis: Phân tích các yêu cầu giao diện người dùng (UI/UX) từ Product Owner. Xác định các màn hình chính cần triển khai: User (quản lý người dùng), Login (đăng nhập/đăng ký), Booking (đặt thuê xe), Blog (tin tức), Xe (danh sách xe), Trạm (hệ thống trạm sạc/trả xe).
+Tech Stack Decision: Thảo luận và quyết định sử dụng React.js (hoặc Next.js) cho Frontend, kết hợp TypeScript để đảm bảo type safety.
+
+Ngày 2 (28/10): Thiết lập Môi trường Phát triển
+
+Hoạt động Kỹ thuật:
+Project Initialization: Khởi tạo dự án với Create React App hoặc Vite, cấu hình TypeScript.
+Folder Structure: Thiết kế cấu trúc thư mục theo feature-based: /src/features/user, /src/features/auth, /src/features/booking, /src/features/blog, /src/features/vehicle, /src/features/station.
+Module Planning: Lên kế hoạch phát triển 6 module chính: User, Login, Booking, Blog, Xe, Trạm.
+Git Setup: Thiết lập Git repository, cấu hình branching strategy (GitFlow: main, develop, feature/user, feature/booking, feature/vehicle...).
+
+Ngày 3 (29/10): Thiết kế Hệ thống Design System cho Voltgo
+
+Hoạt động Kỹ thuật:
+UI Library Selection: Lựa chọn thư viện UI phù hợp: Material-UI (MUI), Ant Design hoặc Tailwind CSS.
+Voltgo Theme: Định nghĩa theme colors cho Voltgo (màu xanh lá - thể hiện xe điện thân thiện môi trường), typography và spacing system.
+Component Library: Xây dựng các shared components: VehicleCard (hiển thị thông tin xe), StationMarker (marker trạm trên bản đồ), BookingCard (thẻ đặt xe).
+
+Ngày 4 (30/10): Cấu hình Routing và State Management
+
+Hoạt động Kỹ thuật:
+React Router: Cấu hình routing với React Router v6 cho các trang: /login, /register, /user, /booking, /vehicles, /stations, /blog.
+State Management: Cấu hình Redux Toolkit với các slices: authSlice, userSlice, bookingSlice, vehicleSlice, stationSlice, blogSlice.
+API Layer Setup: Thiết lập Axios instance với các endpoints cho từng module: /api/auth, /api/users, /api/bookings, /api/vehicles, /api/stations, /api/blogs.
+
+Ngày 5 (31/10): Xây dựng Layout Components
+
+Hoạt động Kỹ thuật:
+Layout Architecture: Xây dựng MainLayout với Header (logo Voltgo, navigation đến Xe, Trạm, Blog, Booking), Sidebar cho admin, Footer.
+Navigation Menu: Triển khai menu điều hướng với các mục: Trang chủ, Danh sách Xe, Trạm sạc, Blog, Đặt xe, Tài khoản.
+Responsive Design: Đảm bảo layout responsive cho mobile (hamburger menu) và desktop (full navigation).
+
+Tuần 9: Container AWS & Authentication Voltgo (03/11 – 07/11)
+
+Mục tiêu kép: Làm chủ Docker và các nền tảng điều phối container trên AWS, đồng thời xây dựng các trang Authentication cho Voltgo.
+
+=== PHẦN A: AWS - Công nghệ Container ===
+
+Ngày 1 (03/11): Docker Fundamentals
+
+Hoạt động Kỹ thuật:
+Containerization: Bắt đầu với Containerization with Docker.
+Dockerfile: Viết Dockerfile tối ưu (Multi-stage build) để giảm kích thước image.
+ECR: Tạo Repository trên Amazon Elastic Container Registry (ECR). Thực hiện docker push để lưu trữ image private an toàn trên AWS.
+
+Ngày 2 (04/11): Amazon ECS & Fargate
+
+Hoạt động Kỹ thuật:
+Serverless Containers: Triển khai Containerization with Amazon ECS and AWS Fargate.
+Task Definition: Định nghĩa tài nguyên (CPU/RAM) cho container. Lựa chọn Launch Type là Fargate để không phải quản lý EC2 bên dưới.
+Service: Tạo ECS Service để duy trì số lượng bản sao (replicas) mong muốn và tích hợp với Application Load Balancer.
+
+Ngày 3 (05/11): Amazon EKS (Kubernetes) - Setup
+
+Hoạt động Kỹ thuật:
+K8s on AWS: Nhập môn Getting Started with Amazon EKS.
+Cluster Creation: Sử dụng công cụ eksctl hoặc CDK EKS Blueprints để khởi tạo Control Plane.
+Node Groups: Cấu hình Managed Node Groups để AWS tự động quản lý việc vá lỗi và nâng cấp cho các worker node EC2.
+
+Ngày 4 (06/11): Triển khai Ứng dụng trên EKS
+
+Hoạt động Kỹ thuật:
+Manifests: Thực hành Deploying Your First Application to Amazon EKS. Viết các file YAML K8s tiêu chuẩn (Deployment, Service, Ingress).
+Load Balancing: Cài đặt AWS Load Balancer Controller để EKS có thể tự động tạo ALB khi Ingress resource được khai báo.
+
+Ngày 5 (07/11): CI/CD cho Container
+
+Hoạt động Kỹ thuật:
+Pipeline: Xây dựng CI/CD Pipeline for ECS Applications và CI/CD for EKS Applications.
+Flow: CodeCommit (Source) -> CodeBuild (Build Image & Push ECR) -> CodeDeploy (Deploy to ECS/EKS). Thực hành chiến lược Blue/Green Deployment.
+
+=== PHẦN B: Voltgo - Module Login & User ===
+
+Ngày 1 (03/11): Xây dựng Trang Đăng nhập (Login Page)
+
+Hoạt động Kỹ thuật:
+Login UI: Thiết kế và triển khai giao diện đăng nhập Voltgo với form validation sử dụng React Hook Form và Yup/Zod schema.
+Form Components: Xây dựng các form components: TextInput (email/phone), PasswordInput với show/hide toggle.
+Remember Me: Triển khai tính năng "Ghi nhớ đăng nhập" sử dụng localStorage/cookies.
+Forgot Password: Xây dựng flow quên mật khẩu với gửi OTP qua email/SMS.
+
+Ngày 2 (04/11): Xây dựng Trang Đăng ký (Register Page)
+
+Hoạt động Kỹ thuật:
+Registration Flow: Triển khai form đăng ký tài khoản Voltgo với các trường: họ tên, email, số điện thoại, mật khẩu.
+User Type Selection: Cho phép chọn loại tài khoản: Khách hàng cá nhân hoặc Doanh nghiệp.
+Validation: Thiết lập validation: email format, số điện thoại Việt Nam (10 số), password strength.
+Terms & Conditions: Tích hợp checkbox đồng ý điều khoản sử dụng dịch vụ thuê xe Voltgo.
+
+Ngày 3 (05/11): Tích hợp Authentication API
+
+Hoạt động Kỹ thuật:
+API Integration: Kết nối Login/Register với Backend API: POST /api/auth/login, POST /api/auth/register.
+Token Management: Triển khai JWT token storage và auto-refresh mechanism.
+Auth Context: Xây dựng AuthContext/AuthProvider để quản lý trạng thái đăng nhập toàn ứng dụng.
+Protected Routes: Bảo vệ các trang Booking, User Profile yêu cầu đăng nhập.
+
+Ngày 4 (06/11): Xây dựng Trang User (Quản lý Người dùng)
+
+Hoạt động Kỹ thuật:
+User Profile Page: Xây dựng trang thông tin cá nhân: avatar, họ tên, email, số điện thoại, địa chỉ.
+User Edit Form: Triển khai form chỉnh sửa thông tin cá nhân với inline editing.
+Avatar Upload: Tích hợp tính năng upload và crop avatar.
+Driver License: Xây dựng form upload GPLX (Giấy phép lái xe) - yêu cầu bắt buộc để thuê xe.
+
+Ngày 5 (07/11): Hoàn thiện Module User
+
+Hoạt động Kỹ thuật:
+Booking History: Hiển thị lịch sử các lần thuê xe của user trong trang User.
+Favorite Vehicles: Xây dựng tính năng lưu xe yêu thích.
+Payment Methods: Tích hợp quản lý phương thức thanh toán (thẻ ngân hàng, ví điện tử).
+Notification Settings: Cho phép user cấu hình nhận thông báo qua email/SMS về booking.
+
+Tuần 10: Serverless AWS & User Profile Voltgo (10/11 – 14/11)
+
+Mục tiêu kép: Xây dựng ứng dụng serverless trên AWS và phát triển tính năng User Profile cho Voltgo.
+
+=== PHẦN A: AWS - Kiến trúc Serverless ===
+
+Ngày 1 (10/11): Bộ ba Serverless (Lambda, API Gateway, DynamoDB)
+
+Hoạt động Kỹ thuật:
+Backend Logic: Viết hàm AWS Lambda xử lý logic (ví dụ: CRUD sách).
+Database: Tích hợp Lambda với DynamoDB sử dụng AWS SDK.
+API Interface: Xây dựng REST API với API Gateway, cấu hình Resource và Method, tích hợp Proxy Integration với Lambda.
+
+Ngày 2 (11/11): Xác thực và Bảo mật Serverless
+
+Hoạt động Kỹ thuật:
+Auth: Triển khai Authentication with Amazon Cognito. Tạo Cognito Authorizer trên API Gateway để chặn các request không có token hợp lệ.
+SSL/Domain: Cấu hình Custom Domains và SSL cho Serverless Applications.
+
+Ngày 3 (12/11): Kiến trúc Hướng sự kiện (Event-Driven)
+
+Hoạt động Kỹ thuật:
+Async Processing: Thực hành Processing orders with SQS and SNS.
+S3 Triggers: Cấu hình Lambda với S3. Khi người dùng upload ảnh lên S3, Lambda tự động kích hoạt để tạo thumbnail.
+
+Ngày 4 (13/11): Điều phối Quy trình (Step Functions)
+
+Hoạt động Kỹ thuật:
+State Machine: Triển khai Workflow Orchestration with AWS Step Functions.
+Scenario: Xây dựng quy trình phê duyệt đơn hàng: Kiểm tra kho -> Trừ tiền -> Gửi email.
+
+Ngày 5 (14/11): Giám sát Serverless (X-Ray)
+
+Hoạt động Kỹ thuật:
+Tracing: Kích hoạt Distributed Tracing with X-Ray and CloudWatch.
+Service Map: Quan sát bản đồ dịch vụ để thấy luồng đi của request từ API Gateway -> Lambda -> DynamoDB.
+
+=== PHẦN B: Voltgo - Module Xe (Vehicle) & Trạm (Station) ===
+
+Ngày 1 (10/11): Xây dựng Trang Danh sách Xe (Vehicle List)
+
+Hoạt động Kỹ thuật:
+Vehicle List Page: Triển khai trang danh sách xe điện Voltgo với grid/list view toggle.
+Vehicle Card Component: Xây dựng VehicleCard hiển thị: hình ảnh xe, tên xe, loại xe (scooter/bike/car), giá thuê/giờ, pin còn lại, trạng thái (available/rented/charging).
+Filter & Search: Triển khai bộ lọc theo: loại xe, khoảng giá, phạm vi di chuyển (km), trạm gần nhất.
+Sorting: Cho phép sắp xếp theo: giá thấp-cao, khoảng cách gần nhất, pin nhiều nhất, đánh giá cao nhất.
+
+Ngày 2 (11/11): Xây dựng Trang Chi tiết Xe (Vehicle Detail)
+
+Hoạt động Kỹ thuật:
+Vehicle Detail Page: Triển khai trang chi tiết xe với image gallery, thông số kỹ thuật.
+Specifications Display: Hiển thị: loại xe, hãng sản xuất, năm sản xuất, phạm vi di chuyển, tốc độ tối đa, dung lượng pin.
+Pricing Information: Hiển thị bảng giá thuê: theo giờ, theo ngày, theo tuần với các khuyến mãi.
+Availability Calendar: Tích hợp calendar hiển thị lịch xe available để đặt trước.
+Reviews Section: Hiển thị đánh giá và bình luận từ người dùng đã thuê xe.
+
+Ngày 3 (12/11): Xây dựng Trang Danh sách Trạm (Station List)
+
+Hoạt động Kỹ thuật:
+Station List Page: Triển khai trang danh sách trạm sạc/trả xe Voltgo.
+Station Card Component: Xây dựng StationCard hiển thị: tên trạm, địa chỉ, số xe available, số chỗ sạc trống, khoảng cách từ vị trí hiện tại.
+Map Integration: Tích hợp Google Maps/Mapbox hiển thị vị trí các trạm trên bản đồ.
+Nearby Stations: Sử dụng Geolocation API để hiển thị các trạm gần vị trí người dùng nhất.
+
+Ngày 4 (13/11): Xây dựng Trang Chi tiết Trạm (Station Detail)
+
+Hoạt động Kỹ thuật:
+Station Detail Page: Triển khai trang chi tiết trạm với thông tin đầy đủ.
+Station Info: Hiển thị: địa chỉ đầy đủ, giờ hoạt động, số điện thoại, tiện ích (wifi, toilet, cafe).
+Available Vehicles: Danh sách xe hiện có tại trạm với quick booking button.
+Charging Slots: Hiển thị số slot sạc và tình trạng (available/occupied).
+Directions: Tích hợp chỉ đường từ vị trí hiện tại đến trạm qua Google Maps.
+
+Ngày 5 (14/11): Map View & Real-time Updates
+
+Hoạt động Kỹ thuật:
+Full Map View: Xây dựng trang bản đồ full-screen hiển thị tất cả trạm và xe available.
+Custom Markers: Thiết kế custom markers cho: trạm (màu xanh), xe available (màu vàng), trạm đầy (màu đỏ).
+Marker Clustering: Triển khai marker clustering khi zoom out để tránh chồng chéo.
+Real-time Status: Cập nhật real-time tình trạng xe và trạm thông qua WebSocket hoặc polling.
+
+Tuần 11: Hiện đại hóa Ứng dụng AWS & Testing Voltgo (17/11 – 21/11)
+
+Mục tiêu kép: Học về Microservices và DevOps trên AWS, đồng thời tối ưu hóa và testing cho Voltgo.
+
+=== PHẦN A: AWS - Hiện đại hóa Ứng dụng ===
+
+Ngày 1 (17/11): Chiến lược Phân rã Monolith
+
+Hoạt động Kỹ thuật:
+Strangler Fig Pattern: Nghiên cứu chiến lược Monolith to Microservices Migration.
+Thực hành: Xác định một module chức năng (ví dụ: Module Giỏ hàng) trong ứng dụng Monolith để tách ra thành Microservice riêng biệt.
+
+Ngày 2 (18/11): Xây dựng Microservice
+
+Hoạt động Kỹ thuật:
+Implementation: Thực hiện Create a Microservice. Viết lại module Giỏ hàng bằng Node.js chạy trên Lambda hoặc Fargate.
+Database Split: Tách dữ liệu của Giỏ hàng ra khỏi Database Monolith chung sang một bảng DynamoDB riêng (Database-per-service pattern).
+
+Ngày 3 (19/11): Giao tiếp Microservices
+
+Hoạt động Kỹ thuật:
+Messaging: Triển khai Microservices Messaging and Eventing. Thay vì gọi trực tiếp (HTTP REST), chuyển sang giao tiếp bất đồng bộ qua EventBridge hoặc SNS.
+
+Ngày 4 (20/11): CI/CD cho Application Release
+
+Hoạt động Kỹ thuật:
+Release Pipeline: Xây dựng CI/CD for Application Release.
+CodePipeline: Kết nối toàn bộ quy trình: Source -> Build -> Test -> Deploy.
+Approval: Thêm bước duyệt thủ công (Manual Approval) trước khi deploy lên môi trường Production.
+
+Ngày 5 (21/11): DevOps Nâng cao
+
+Hoạt động Kỹ thuật:
+DevOps Culture: Áp dụng DevOps with AWS CodePipeline.
+Shift Left: Tích hợp kiểm tra bảo mật (SAST/DAST) vào giai đoạn Build. Nếu phát hiện lỗ hổng bảo mật, Pipeline sẽ tự động fail và chặn deploy.
+
+=== PHẦN B: Voltgo - Module Booking & Blog ===
+
+Ngày 1 (17/11): Xây dựng Trang Đặt Xe (Booking Page)
+
+Hoạt động Kỹ thuật:
+Booking Form: Triển khai form đặt xe với các bước: Chọn xe -> Chọn thời gian -> Chọn trạm nhận/trả -> Xác nhận.
+Vehicle Selection: Hiển thị xe đã chọn với thông tin chi tiết và giá thuê.
+DateTime Picker: Tích hợp date-time picker cho thời gian nhận xe và trả xe.
+Station Selector: Dropdown/Map chọn trạm nhận xe và trạm trả xe.
+
+Ngày 2 (18/11): Booking Flow & Price Calculation
+
+Hoạt động Kỹ thuật:
+Price Calculator: Triển khai logic tính giá thuê: (số giờ x giá/giờ) + phí khác + khuyến mãi.
+Promo Code: Xây dựng input nhập mã khuyến mãi với validation API.
+Booking Summary: Hiển thị tổng hợp thông tin booking trước khi xác nhận: xe, thời gian, trạm, giá.
+Payment Selection: Cho phép chọn phương thức thanh toán: thẻ ngân hàng, ví MoMo, ZaloPay, tiền mặt.
+
+Ngày 3 (19/11): Booking Confirmation & Management
+
+Hoạt động Kỹ thuật:
+Booking Confirmation: Xây dựng trang xác nhận booking thành công với mã booking và QR code.
+Booking List: Triển khai trang danh sách booking của user với các trạng thái: Pending, Confirmed, In Progress, Completed, Cancelled.
+Booking Detail: Trang chi tiết booking với đầy đủ thông tin và options: Cancel, Extend, Report Issue.
+Cancel Booking: Triển khai flow hủy booking với xác nhận và refund policy.
+
+Ngày 4 (20/11): Xây dựng Trang Blog (Blog List)
+
+Hoạt động Kỹ thuật:
+Blog List Page: Triển khai trang danh sách bài viết blog Voltgo.
+Blog Card Component: Xây dựng BlogCard hiển thị: thumbnail, tiêu đề, tóm tắt, ngày đăng, tác giả, danh mục.
+Blog Categories: Filter bài viết theo danh mục: Tin tức, Hướng dẫn sử dụng, Khuyến mãi, Xe điện & Môi trường.
+Pagination: Triển khai pagination hoặc infinite scroll cho danh sách blog.
+
+Ngày 5 (21/11): Blog Detail & Related Content
+
+Hoạt động Kỹ thuật:
+Blog Detail Page: Triển khai trang chi tiết bài viết với rich text content, images, videos.
+Social Sharing: Tích hợp nút chia sẻ lên Facebook, Twitter, LinkedIn.
+Related Posts: Hiển thị các bài viết liên quan dựa trên category và tags.
+Comments Section: Xây dựng hệ thống bình luận cho bài viết (nếu có yêu cầu).
+Blog Search: Tích hợp tìm kiếm bài viết theo từ khóa.
+
+Tuần 12: Data Analytics AWS & Deployment Voltgo (24/11 – 28/11)
+
+Mục tiêu kép: Xây dựng Data Lake và ứng dụng AI/ML trên AWS, đồng thời deploy Voltgo lên production.
+
+=== PHẦN A: AWS - Data Analytics & AI/ML ===
+
+Ngày 1 (24/11): Kiến trúc Data Lake
+
+Hoạt động Kỹ thuật:
+S3 as Data Lake: Triển khai Data Lake Fundamentals.
+Partitioning: Tổ chức dữ liệu trong S3 theo cấu trúc year/month/day để tối ưu hóa hiệu năng và chi phí truy vấn.
+
+Ngày 2 (25/11): Phân tích Dữ liệu (Analytics)
+
+Hoạt động Kỹ thuật:
+AWS Glue: Tạo Crawler để tự động phát hiện schema của dữ liệu CSV/JSON trong S3 và tạo bảng trong Data Catalog.
+Amazon Athena: Sử dụng SQL chuẩn để truy vấn dữ liệu trực tiếp từ S3 mà không cần load vào database.
+
+Ngày 3 (26/11): Trực quan hóa Dữ liệu (BI)
+
+Hoạt động Kỹ thuật:
+Dashboarding: Sử dụng Business Intelligence with Amazon QuickSight.
+Visualize: Tạo biểu đồ trực quan hóa doanh thu theo khu vực, nhúng dashboard vào ứng dụng web.
+
+Ngày 4 (27/11): Amazon SageMaker cơ bản
+
+Hoạt động Kỹ thuật:
+ML Environment: Bắt đầu với Amazon SageMaker.
+Studio: Khởi tạo SageMaker Studio. Sử dụng Data Wrangler để import, phân tích và chuẩn hóa dữ liệu.
+
+Ngày 5 (28/11): Dịch vụ AI Cao cấp
+
+Hoạt động Kỹ thuật:
+AI Services: Trải nghiệm AWS AI Services Integration.
+Rekognition: Tích hợp tính năng nhận diện hình ảnh vào ứng dụng.
+Transcribe/Polly: Tích hợp chuyển đổi văn bản thành giọng nói và ngược lại.
+
+=== PHẦN B: Voltgo - Testing, Optimization & Deployment ===
+
+Ngày 1 (24/11): Testing các Module đã phát triển
+
+Hoạt động Kỹ thuật:
+Unit Tests: Viết unit tests cho các components: VehicleCard, StationCard, BookingForm, BlogCard.
+Integration Tests: Test các flows chính: Login -> Chọn xe -> Booking -> Xác nhận.
+API Tests: Test tích hợp với các endpoints: /api/vehicles, /api/stations, /api/bookings, /api/blogs.
+E2E Tests: Viết Cypress tests cho toàn bộ booking flow từ đầu đến cuối.
+
+Ngày 2 (25/11): Performance Optimization
+
+Hoạt động Kỹ thuật:
+Lazy Loading: Triển khai lazy loading cho các pages: Vehicle, Station, Blog, Booking.
+Image Optimization: Tối ưu hình ảnh xe và trạm với WebP format và responsive images.
+Bundle Analysis: Phân tích và giảm bundle size, code splitting theo routes.
+Lighthouse Audit: Chạy audit và fix issues để đạt score > 90 cho Performance.
+
+Ngày 3 (26/11): CI/CD Pipeline & Deployment
+
+Hoạt động Kỹ thuật:
+GitHub Actions: Thiết lập CI/CD workflow cho Voltgo Frontend.
+Pipeline Stages: Cấu hình: Lint -> Test -> Build -> Deploy to Staging -> Deploy to Production.
+AWS Deployment: Deploy lên S3 + CloudFront với custom domain voltgo.com.
+Environment Config: Cấu hình .env cho các môi trường: development, staging, production.
+
+Ngày 4 (27/11): Bug Fixes & Final Testing
+
+Hoạt động Kỹ thuật:
+Bug Fixes: Fix các bugs phát hiện trong quá trình testing các module User, Login, Booking, Vehicle, Station, Blog.
+Cross-browser Testing: Test trên Chrome, Firefox, Safari, Edge để đảm bảo compatibility.
+Mobile Testing: Test responsive trên các thiết bị mobile iOS và Android.
+UAT Support: Hỗ trợ team QA trong User Acceptance Testing.
+
+Ngày 5 (28/11): Documentation & Handover
+
+Hoạt động Kỹ thuật:
+Technical Documentation: Viết documentation cho các modules đã phát triển: User, Login, Booking, Vehicle, Station, Blog.
+Component Storybook: Hoàn thiện Storybook với tất cả components của Voltgo.
+API Documentation: Cập nhật API docs cho frontend integration.
+Knowledge Transfer: Chuẩn bị tài liệu hướng dẫn cho team members tiếp nhận.
+
+Tuần 13: Tổng kết & Hoàn thiện (01/12 – 05/12)
+
+Mục tiêu: Tổng kết toàn bộ chương trình, hoàn thiện tài liệu và chuẩn bị cho các bước tiếp theo.
+
+=== PHẦN A: AWS - Tổng kết & Review ===
+
+Ngày 1 (01/12): Review Kiến trúc AWS
+
+Hoạt động Kỹ thuật:
+Architecture Review: Xem lại toàn bộ các kiến trúc AWS đã xây dựng: từ VPC cơ bản, EC2 Web App, đến Microservices và Data Lake.
+Well-Architected Framework: Đối chiếu các kiến trúc đã triển khai với 6 pillars của AWS Well-Architected Framework.
+Gap Analysis: Xác định các điểm cần cải thiện trong từng kiến trúc.
+
+Ngày 2 (02/12): Security & Compliance Review
+
+Hoạt động Kỹ thuật:
+Security Audit: Review lại toàn bộ cấu hình bảo mật: IAM policies, Security Groups, KMS keys, WAF rules.
+Compliance Check: Kiểm tra tuân thủ các best practices về bảo mật AWS.
+Documentation: Hoàn thiện tài liệu về security architecture và incident response procedures.
+
+Ngày 3 (03/12): Cost Optimization Final
+
+Hoạt động Kỹ thuật:
+Cost Analysis: Phân tích chi phí tổng thể của toàn bộ quá trình học tập.
+Resource Cleanup: Xóa bỏ tất cả tài nguyên AWS thực hành (NAT Gateway, RDS, EKS Cluster, SageMaker Endpoints).
+Budget Report: Tạo báo cáo chi phí cuối cùng và lessons learned về FinOps.
+
+Ngày 4 (04/12): Certification Preparation
+
+Hoạt động Kỹ thuật:
+Certification Path: Lên kế hoạch cho các chứng chỉ AWS (Solutions Architect Associate, Developer Associate).
+Study Materials: Tổng hợp các tài liệu học tập và practice exams.
+Knowledge Gaps: Xác định các lĩnh vực cần học thêm trước khi thi chứng chỉ.
+
+Ngày 5 (05/12): AWS Program Completion
+
+Hoạt động Kỹ thuật:
+Final Documentation: Hoàn thiện toàn bộ tài liệu kỹ thuật cho AWS journey.
+Presentation: Chuẩn bị presentation tổng kết về những gì đã học và đạt được.
+Next Steps Planning: Lên kế hoạch cho các dự án thực tế tiếp theo sử dụng AWS.
+
+=== PHẦN B: Voltgo - Hoàn thiện & Bàn giao ===
+
+Ngày 1 (01/12): Final Testing & Bug Fixes
+
+Hoạt động Kỹ thuật:
+Regression Testing: Chạy full regression test suite để đảm bảo không có bugs.
+Bug Fixes: Fix các bugs còn tồn đọng từ testing phases trước.
+Performance Final Check: Kiểm tra lần cuối performance metrics và Lighthouse scores.
+
+Ngày 2 (02/12): Documentation Completion
+
+Hoạt động Kỹ thuật:
+Technical Docs: Hoàn thiện technical documentation cho developers.
+User Guide: Viết user guide cho các tính năng chính của ứng dụng.
+API Documentation: Cập nhật và hoàn thiện API documentation với Swagger/OpenAPI.
+
+Ngày 3 (03/12): Knowledge Transfer
+
+Hoạt động Kỹ thuật:
+Team Training: Tổ chức buổi training cho team members mới về codebase.
+Code Walkthrough: Thực hiện code walkthrough cho các modules quan trọng.
+Handover Document: Tạo handover document với tất cả thông tin cần thiết.
+
+Ngày 4 (04/12): Production Monitoring Setup
+
+Hoạt động Kỹ thuật:
+Alerting Rules: Thiết lập alerting rules cho production environment.
+Dashboard Setup: Tạo monitoring dashboards cho team operations.
+Incident Response: Viết incident response procedures cho frontend issues.
+
+Ngày 5 (05/12): Project Retrospective & Closure
+
+Hoạt động Kỹ thuật:
+Retrospective: Tham gia buổi retrospective đánh giá dự án Voltgo.
+Lessons Learned: Document lessons learned và best practices discovered.
+Celebration: Kết thúc dự án và celebrate team achievements.
+
+=== NGÀY CUỐI CÙNG (07/12): Tổng Kết Toàn Bộ Chương Trình ===
+
+Hoạt động:
+Final Report: Hoàn thiện báo cáo tổng kết toàn bộ 3 tháng học tập và làm việc.
+Portfolio Update: Cập nhật portfolio với các dự án và kiến thức đã đạt được.
+Career Planning: Lên kế hoạch career development dựa trên năng lực mới.
+Thank You: Gửi lời cảm ơn đến mentors, team members và AWS Study Group community.
+
+Đánh giá Tổng kết Toàn bộ Chương trình:
+
+1. AWS Cloud Journey:
+- Xây dựng kiến trúc 3-tier hoàn chỉnh (Web/App/DB)
+- Triển khai Auto Scaling, CloudWatch monitoring, CloudFront CDN
+- Bảo mật với IAM, WAF, KMS, Secrets Manager, GuardDuty
+- Di chuyển và khôi phục thảm họa với DMS, DRS
+- Container với ECS, EKS và Serverless với Lambda
+- Data Analytics với Glue, Athena, QuickSight
+
+2. Dự án Voltgo (Frontend Developer):
+- Hệ thống Design System và Component Library hoàn chỉnh
+- Các trang Authentication, Dashboard, Profile, Settings với full functionality
+- Code coverage >80% với unit tests và integration tests
+- Pipeline CI/CD automated và deployment lên AWS production
+- Performance scores đạt >90 trên Lighthouse
+
+Phụ Lục: Bảng Tổng Hợp Công Nghệ Chính
+
+Lĩnh vực			Dịch vụ Cốt lõi				Dịch vụ Nâng cao/Hiện đại
+Compute				EC2, Lightsail				Lambda, Fargate, ECS, EKS
+Storage				S3, EBS, EFS				S3 Glacier, Storage Gateway
+Database			RDS, DynamoDB				ElastiCache, Aurora Serverless
+Network				VPC, Route 53				CloudFront, Transit Gateway, VPC Peering
+Security			IAM, Security Groups		WAF, Shield, KMS, Secrets Manager, GuardDuty, Cognito
+Management			CloudWatch, CloudTrail		Systems Manager, CloudFormation, CDK, Config
+Data/AI				Athena, Glue				SageMaker, QuickSight, Rekognition
+Frontend (Voltgo)	React.js, TypeScript		Redux Toolkit, React Router, Jest, Cypress
+
+Bảng Tổng Hợp Công Nghệ Frontend - Dự án Voltgo
+
+Lĩnh vực			Công nghệ sử dụng
+Framework			React.js / Next.js với TypeScript
+State Management	Redux Toolkit / Zustand
+Routing				React Router v6
+UI Library			Material-UI / Tailwind CSS
+Form Handling		React Hook Form + Yup/Zod
+HTTP Client			Axios với interceptors
+Charts				Chart.js / Recharts / ApexCharts
+Testing				Jest, React Testing Library, Cypress/Playwright
+CI/CD				GitHub Actions
+Deployment			AWS S3 + CloudFront
+Monitoring			Sentry, CloudWatch RUM
+
+Báo cáo này xác nhận rằng học viên đã hoàn thành một khối lượng công việc khổng lồ, từ việc học các khái niệm cơ bản về AWS Cloud đến triển khai dự án thực tế Voltgo với vai trò Frontend Developer. Quá trình này chuyển đổi từ người mới bắt đầu thành một kỹ sư có năng lực thực chiến, sẵn sàng cho các dự án quy mô doanh nghiệp.
+
+Nguồn trích dẫn
+1. The First Cloud Journey - AWS Study Group, truy cập vào tháng 11 30, 2025, https://cloudjourney.awsstudygroup.com/
+2. Migrate to AWS :: The First Cloud Journey, truy cập vào tháng 11 30, 2025, https://cloudjourney.awsstudygroup.com/2-migrate/
+3. Modernize the application :: The First Cloud Journey, truy cập vào tháng 11 30, 2025, https://cloudjourney.awsstudygroup.com/4-modernize/
+4. Explore AWS Services :: The First Cloud Journey, truy cập vào tháng 11 30, 2025, https://cloudjourney.awsstudygroup.com/1-explore/
+5. AI/ML service on AWS :: The First Cloud Journey, truy cập vào tháng 11 30, 2025, https://cloudjourney.awsstudygroup.com/7-aimlservice/
+6. Container services :: The First Cloud Journey, truy cập vào tháng 11 30, 2025, https://cloudjourney.awsstudygroup.com/5-container/
+7. Data & Analytics :: The First Cloud Journey, truy cập vào tháng 11 30, 2025, https://cloudjourney.awsstudygroup.com/6-dataandanalytic/
