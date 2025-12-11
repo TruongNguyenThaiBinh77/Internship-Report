@@ -47,3 +47,9 @@ Tôi rất mong muốn có cơ hội quay lại AWS hoặc tiếp tục đồng 
 
 **Góp ý khác (tự do chia sẻ):**  
 Cảm ơn Team FCJ và các Mentor đã tạo ra một sân chơi quá bổ ích. Dù bản thân tôi còn nhiều hạn chế về mặt kỷ luật và giao tiếp trong thời gian qua, nhưng sự kiên nhẫn của mọi người chính là bài học lớn nhất mà tôi nhận được. Chúc chương trình ngày càng thành công!
+
+Khép lại hành trình tại FCJ, em muốn gửi lời cảm ơn sâu sắc nhất đến những người dẫn đường tâm huyết đã giúp em hoàn thành chặng đường này một cách trọn vẹn.
+
+Đặc biệt tri ân các anh: Nguyễn Gia Hưng, Văn Hoàng Kha, Lữ Hoàn Thiện, Nguyễn Tuấn Thịnh, Lê Nguyễn Vũ Hoàng và Nguyễn Đồng Thanh Hiệp. Cảm ơn các anh đã luôn support nhiệt tình bất kể ngày đêm, từ những quy trình nhỏ nhất đến việc định hướng tư duy chiến lược.
+
+Sự kiên nhẫn và động viên của các anh chính là hành trang quý giá nhất mà em nhận được. Chúc đội ngũ Admin và Mentor của FCJ luôn mạnh khỏe và thành công!

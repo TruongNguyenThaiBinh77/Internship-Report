@@ -48,3 +48,9 @@ I very much hope to have the opportunity to return to AWS or continue working wi
 
 **Any other comments (free sharing):**  
 Thank you to the FCJ Team and Mentors for creating such a beneficial playground. Although I still have many limitations in terms of discipline and communication during this time, everyone's patience is the greatest lesson I have received. Wishing the program continued success!
+
+Closing my journey at FCJ, I want to send my deepest thanks to the dedicated mentors who helped me complete this journey fully. 
+
+A special gratitude to: Nguyễn Gia Hưng, Văn Hoàng Kha, Lữ Hoàn Thiện, Nguyễn Tuấn Thịnh, Lê Nguyễn Vũ Hoàng, and Nguyễn Đồng Thanh Hiệp. Thank you for always supporting me enthusiastically, day and night, from the smallest processes to guiding strategic thinking.  
+
+Your patience and encouragement are the most valuable gifts I have received. Wishing the FCJ Admin and Mentor team good health and continued success!
